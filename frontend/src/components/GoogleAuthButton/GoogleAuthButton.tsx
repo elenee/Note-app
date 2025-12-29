@@ -1,0 +1,47 @@
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+
+const GoogleAuthButton = () => {
+  const [cookie, setCookie] = useCookies(["accessToken"]);
+  const navigate = useNavigate();
+
+  const login = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (response) => {
+      const code = response.code;
+      if (!code) return console.error("No authorization code returned!");
+
+      try {
+        const res = await axios.post(
+          "http://localhost:3000/auth/google-login",
+          {
+            code,
+          }
+        );
+
+        setCookie("accessToken", res.data.accessToken, {
+          path: "/",
+          maxAge: 3600,
+        });
+        navigate("/notes");
+      } catch (err) {
+        console.error("Backend login error:", err);
+      }
+    },
+    onError: () => console.error("Login failed"),
+  });
+
+  return (
+    <button
+      onClick={() => login()}
+      className="border rounded-lg border-[hsla(219,15%,82%,1)] px-4 py-3 flex justify-center items-center gap-2 font-medium text-[16px] cursor-pointer"
+    >
+      <img src="/Google.svg" alt="Google" />
+      Google
+    </button>
+  );
+};
+
+export default GoogleAuthButton;
