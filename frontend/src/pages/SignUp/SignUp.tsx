@@ -1,21 +1,21 @@
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import { GoogleLogin } from "@react-oauth/google";
-import GoogleAuthButton from "../../components/GoogleAuthButton/GoogleAuthButton";
-import AuthForm from "../../components/AuthForm/AuthForm";
+import GoogleAuthButton from "../../components/Auth/GoogleAuthButton";
+import AuthForm from "../../components/Auth/AuthForm";
+
+interface AuthFormValues {
+  email: string;
+  password: string;
+}
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SignUp = () => {
-  const [cookies, setCookie] = useCookies(["accessToken"]);
-
   const navigate = useNavigate();
-  async function onSubmit(data: any) {
+  async function onSubmit(data: AuthFormValues) {
     try {
-      const res = await axios.post("http://localhost:3000/auth/sign-up", data);
+      const res = await axios.post(`${API_URL}/auth/sign-up`, data);
       if (res.status === 201) {
         navigate("/");
       }
@@ -34,7 +34,7 @@ const SignUp = () => {
           Sign up to start organizing your notes and boost your productivity.
         </p>
       </div>
-      <AuthForm onSubmit={onSubmit} submitLabel="Login" />
+      <AuthForm onSubmit={onSubmit} mode="signup" />
       <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)]">
         <p className="text-[hsla(222,11%,36%,1)]">or login with:</p>
         <GoogleAuthButton />

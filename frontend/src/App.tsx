@@ -3,7 +3,7 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import { CookiesProvider } from "react-cookie";
 import Notes from "./pages/Notes/Notes";
-import AuthContainer from "./components/AuthContainer/AuthContainer";
+import AuthContainer from "./components/Auth/AuthContainer";
 
 const App = () => {
   return (
@@ -15,6 +15,9 @@ const App = () => {
         </Route>
 
         <Route path="/notes" Component={Notes} />
+        {/* <Route path="/notes/*" element={<Notes />}>
+          <Route path="settings" element={<Settings />} />
+        </Route> */}
       </Routes>
     </CookiesProvider>
   );

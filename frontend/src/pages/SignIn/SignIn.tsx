@@ -1,18 +1,24 @@
-import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import GoogleAuthButton from "../../components/GoogleAuthButton/GoogleAuthButton";
-import AuthForm from "../../components/AuthForm/AuthForm";
+import GoogleAuthButton from "../../components/Auth/GoogleAuthButton";
+import AuthForm from "../../components/Auth/AuthForm";
+
+interface AuthFormValues {
+  email: string;
+  password: string;
+}
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SignIn = () => {
-  const [cookies, setCookie] = useCookies(["accessToken"]);
+  const [, setCookie] = useCookies(["accessToken"]);
   const navigate = useNavigate();
 
-  async function onSubmit(data: any) {
+  async function onSubmit(data: AuthFormValues, setError: any) {
     try {
-      const res = await axios.post("http://localhost:3000/auth/sign-in", data);
+      const res = await axios.post(`${API_URL}/auth/sign-in`, data);
       if (res.status === 201) {
         setCookie("accessToken", res.data.accessToken, {
           path: "/",
@@ -21,7 +27,18 @@ const SignIn = () => {
         navigate("/notes");
       }
     } catch (error: any) {
-      console.log(error);
+      if (error.response && error.response.status === 401) {
+        setError("password", {
+          type: "manual",
+          message: error.response.data.message,
+        });
+        setError("email", {
+          type: "manual",
+          message: error.response.data.message,
+        });
+      } else {
+        console.error(error);
+      }
     }
   }
 
@@ -35,7 +52,7 @@ const SignIn = () => {
           Please log in to continue
         </p>
       </div>
-      <AuthForm onSubmit={onSubmit} submitLabel="Login" />
+      <AuthForm onSubmit={onSubmit} mode="login" />
       <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)]">
         <p className="text-[hsla(222,11%,36%,1)]">or login with:</p>
         <GoogleAuthButton />
