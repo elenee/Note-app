@@ -1,26 +1,25 @@
-import type { HeaderMode } from "../../types/note";
+import { useLocation } from "react-router-dom";
 
 interface IHeaderProps {
-  mode: HeaderMode;
   onSettingsClick: () => void;
 }
 
-const Header = ({ mode, onSettingsClick }: IHeaderProps) => {
+const Header = ({ onSettingsClick }: IHeaderProps) => {
+  const location = useLocation();
   let title = "";
 
-  switch (mode.type) {
-    case "ALL":
-      title = "All Notes";
-      break;
-    case "ARCHIVED":
-      title = "Archived Notes";
-      break;
-    case "SETTINGS":
-      title = "Settings";
-      break;
-    case "TAG":
-      title = `Notes Tagged: ${mode.tag}`;
-      break;
+  const pathname = location.pathname;
+  if (pathname === "/notes" || pathname === "/") {
+    title = "All Notes";
+  } else if (pathname === "/archived") {
+    title = "Archived Notes";
+  } else if (pathname === "/settings") {
+    title = "Settings";
+  } else if (pathname.startsWith("/tags/")) {
+    const tagName = pathname.split("/tags/")[1];
+    title = `Notes Tagged: ${decodeURIComponent(tagName)}`;
+  } else {
+    title = "notes";
   }
 
   return (
@@ -30,7 +29,7 @@ const Header = ({ mode, onSettingsClick }: IHeaderProps) => {
       </h1>
       <div className="flex gap-4">
         <div className="flex items-center w-75 border rounded-lg border-[hsla(219,15%,82%,1)] px-4 py-4 gap-2">
-          <img src="/Search.svg" alt="" className="w-[20px] h-[20px]" />
+          <img src="/Search.svg" alt="" className="w-5 h-5" />
           <input
             type="text"
             placeholder="Search by title, content, or tags…"

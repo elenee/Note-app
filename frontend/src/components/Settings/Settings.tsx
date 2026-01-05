@@ -1,9 +1,8 @@
-type handleLogoutProps = {
-  handleLogout: () => void;
-};
 
-const Settings = ({ handleLogout }: handleLogoutProps) => {
-  return <div>Settings</div>;
-};
+const Settings = () => {
+  return (
+    <div>Settings</div>
+  )
+}
 
-export default Settings;
+export default Settings

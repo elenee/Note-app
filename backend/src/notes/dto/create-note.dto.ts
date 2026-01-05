@@ -11,7 +11,7 @@ export class CreateNoteDto {
   tags?: string[];
   @IsNotEmpty()
   @IsString()
-  @Length(1, 200)
+  @Length(1, 1000)
   content?: string;
   @IsString()
   @IsIn(['active', 'archived'])

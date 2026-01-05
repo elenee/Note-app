@@ -5,6 +5,7 @@ export type CreateNoteDto = {
   title: string;
   tags: string[];
   content: string;
+  status: string;
 };
 
 const normalizeNote = (note: any) => ({
@@ -23,7 +24,7 @@ const getNotes = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  return response.data.map(normalizeNote);
 };
 
 const createNote = async (data: CreateNoteDto, token: string) => {
@@ -40,9 +41,10 @@ const createNote = async (data: CreateNoteDto, token: string) => {
 };
 
 const updateNote = async (id: string, data: CreateNoteDto, token: string) => {
-  const response = await axios.put(`${BASE_URL}/notes/${id}`, data, {
+  const response = await axios.patch(`${BASE_URL}/notes/${id}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
   return normalizeNote(response.data);
 };
 
@@ -52,7 +54,7 @@ const deleteNote = async (id: string, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data;
+  return normalizeNote(response.data);
 };
 
 export default {

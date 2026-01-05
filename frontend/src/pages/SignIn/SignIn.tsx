@@ -10,7 +10,7 @@ interface AuthFormValues {
   password: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 const SignIn = () => {
   const [, setCookie] = useCookies(["accessToken"]);
@@ -19,11 +19,14 @@ const SignIn = () => {
   async function onSubmit(data: AuthFormValues, setError: any) {
     try {
       const res = await axios.post(`${API_URL}/auth/sign-in`, data);
-      if (res.status === 201) {
+      if (res.status === 201 || res.status === 200) {
+        console.log("Response status:", res.status);
+        console.log("Response data:", res.data);
         setCookie("accessToken", res.data.accessToken, {
           path: "/",
           maxAge: 60 * 60,
         });
+        console.log("Cookie set, navigating to /notes");
         navigate("/notes");
       }
     } catch (error: any) {
@@ -37,7 +40,7 @@ const SignIn = () => {
           message: error.response.data.message,
         });
       } else {
-        console.error(error);
+        console.error("Sign-in error:", error);
       }
     }
   }
@@ -59,7 +62,7 @@ const SignIn = () => {
       </div>
       <div className="flex justify-center items-center gap-1">
         <p className="text-[hsla(222,11%,36%,1)]">No account yet?</p>
-        <Link to="/sign-up">
+        <Link to="/auth/sign-up">
           <p>Sign up</p>
         </Link>
       </div>

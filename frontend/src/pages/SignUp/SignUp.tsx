@@ -9,7 +9,7 @@ interface AuthFormValues {
   password: string;
 }
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_BASE_URL
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const SignUp = () => {
     try {
       const res = await axios.post(`${API_URL}/auth/sign-up`, data);
       if (res.status === 201) {
-        navigate("/");
+        navigate("/auth/sign-in");
       }
     } catch (error: any) {
       console.log(error);
@@ -41,7 +41,7 @@ const SignUp = () => {
       </div>
       <div className="flex justify-center items-center gap-1">
         <p className="text-[hsla(222,11%,36%,1)]">No account yet?</p>
-        <Link to="/">
+        <Link to="/auth/sign-in">
           <p>Sign in</p>
         </Link>
       </div>

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_BASE_URL;
+
 const GoogleAuthButton = () => {
   const [, setCookie] = useCookies(["accessToken"]);
   const navigate = useNavigate();
@@ -14,12 +16,9 @@ const GoogleAuthButton = () => {
       if (!code) return console.error("No authorization code returned!");
 
       try {
-        const res = await axios.post(
-          "http://localhost:3000/auth/google-login",
-          {
-            code,
-          }
-        );
+        const res = await axios.post(`${API_URL}/auth/google-login`, {
+          code,
+        });
 
         setCookie("accessToken", res.data.accessToken, {
           path: "/",
