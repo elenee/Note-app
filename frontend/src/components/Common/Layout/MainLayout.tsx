@@ -7,11 +7,12 @@ import { useCookies } from "react-cookie";
 import type { Note } from "../../../types/note";
 import authService from "../../../services/authService";
 import notesService from "../../../services/notesService";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainLayout = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["accessToken"]);
+  const [cookies, removeCookie] = useCookies(["accessToken"]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,17 +31,7 @@ const MainLayout = () => {
     const token = cookies.accessToken;
     if (!token) {
       navigate("/auth/sign-in");
-
-      return;
     }
-
-    setCookie("accessToken", token, {
-      path: "/",
-      maxAge: 60 * 60,
-      secure: true,
-      sameSite: "strict",
-    });
-
     getCurrentUser(token);
 
     const fetchNotes = async () => {
@@ -48,14 +39,14 @@ const MainLayout = () => {
         const notes = await notesService.getNotes(token);
         setNotes(notes);
       } catch (error: any) {
+        removeCookie("accessToken", { path: "/" });
         console.log("failed to fecth notes", error.message);
-        throw error;
       } finally {
         setIsLoading(false);
       }
     };
     fetchNotes();
-  }, [cookies.accessToken, navigate, setCookie]);
+  }, [cookies.accessToken, navigate, removeCookie]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -63,7 +54,7 @@ const MainLayout = () => {
 
   if (!user) return null;
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
       <NotesListSidebar notes={notes} />
       <div className="flex flex-col flex-1">
         <Header onSettingsClick={() => navigate("/settings")} />

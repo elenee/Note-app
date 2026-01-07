@@ -32,7 +32,7 @@ const NotesList = ({
     });
 
   return (
-    <div className="w-72.5 h-screen border-r border-[hsla(216,19%,90%,1)] pl-8 pr-4 pt-5 pb-6 flex flex-col gap-4 scroll">
+    <div className="w-72.5 border-r h-screen border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] pl-8 pr-4 pt-5 pb-6 flex flex-col gap-4 scroll bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
       <button
         onClick={onNoteCreation}
         className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer"
@@ -46,7 +46,7 @@ const NotesList = ({
           </p>
         )}
         {notes.length === 0 && emptyMessage ? (
-          <p className="bg-[hsla(216,19%,90%,1)] p-2 rounded-lg text-[14px] text-[hsla(222,32%, 8%,1)] leading-[1.2] mb-px tracking-[-0.2px]">
+          <p className="bg-[hsla(216,19%,90%,1)] dark:bg-[hsla(231,16%,16%,1)] p-2 rounded-lg text-[14px] text-[hsla(222,32%, 8%,1)] leading-[1.2] mb-px tracking-[-0.2px]">
             {emptyMessage}
           </p>
         ) : (
@@ -56,12 +56,14 @@ const NotesList = ({
             return (
               <div
                 key={note.id}
-                className={`p-2 rounded-lg flex flex-col gap-3 border-b border-[hsla(216,19%,90%,1)] ${
-                  isSelected ? "bg-[hsla(216,26%,96%,1)]" : "bg-white"
+                className={`p-2 rounded-lg flex flex-col gap-3 border-b border-[hsla(216,19%,90%,1)] dark:bg-[hsla(222,32%,8%,1)] dark:text-white ${
+                  isSelected
+                    ? "bg-[hsla(216,26%,96%,1)] dark:bg-[hsla(231,16%,16%,1)]"
+                    : "bg-white"
                 }`}
                 onClick={() => handleSelectedNote(note)}
               >
-                <h1 className="text-[16px] text-[hsla(222,32%,8%,1)] font-semibold">
+                <h1 className="text-[16px] text-[hsla(222,32%,8%,1)] font-semibold dark:text-white">
                   {note.title}
                 </h1>
 
@@ -69,7 +71,7 @@ const NotesList = ({
                   {note.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="bg-[hsla(216,19%,90%,1)] px-1.5 py-0.5 rounded-sm text-[12px]"
+                      className="bg-[hsla(216,19%,90%,1)] px-1.5 py-0.5 rounded-sm text-[12px] dark:bg-[hsla(221,16%,20%,1)]"
                     >
                       {tag}
                     </span>
@@ -77,7 +79,7 @@ const NotesList = ({
                 </div>
 
                 {dateToShow && (
-                  <p className="text-[12px] text-[hsla(221,16%,20%,1)]">
+                  <p className="text-[12px] text-[hsla(221,16%,20%,1)] dark:text-[hsla(216,19%,90%,1)]">
                     {formatDate(dateToShow)}
                   </p>
                 )}

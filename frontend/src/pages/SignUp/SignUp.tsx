@@ -9,7 +9,7 @@ interface AuthFormValues {
   password: string;
 }
 
-const API_URL = import.meta.env.VITE_BASE_URL
+const API_URL = import.meta.env.VITE_BASE_URL;
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -35,14 +35,14 @@ const SignUp = () => {
         </p>
       </div>
       <AuthForm onSubmit={onSubmit} mode="signup" />
-      <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)]">
+      <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)] dark:border-[hsla(222,11%,36%,1)]">
         <p className="text-[hsla(222,11%,36%,1)]">or login with:</p>
         <GoogleAuthButton />
       </div>
       <div className="flex justify-center items-center gap-1">
-        <p className="text-[hsla(222,11%,36%,1)]">No account yet?</p>
+        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)]">No account yet?</p>
         <Link to="/auth/sign-in">
-          <p>Sign in</p>
+          <p className="text-black dark:text-white">Sign in</p>
         </Link>
       </div>
     </>

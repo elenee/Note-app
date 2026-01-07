@@ -19,12 +19,13 @@ const SignIn = () => {
   async function onSubmit(data: AuthFormValues, setError: any) {
     try {
       const res = await axios.post(`${API_URL}/auth/sign-in`, data);
+      const token = res.data.accessToken;
       if (res.status === 201 || res.status === 200) {
-        console.log("Response status:", res.status);
-        console.log("Response data:", res.data);
-        setCookie("accessToken", res.data.accessToken, {
+        setCookie("accessToken", token, {
           path: "/",
           maxAge: 60 * 60,
+          secure: import.meta.env.PROD,
+          sameSite: "lax",
         });
         console.log("Cookie set, navigating to /notes");
         navigate("/notes");
@@ -48,7 +49,7 @@ const SignIn = () => {
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h1 className="font-sans font-bold text-2xl leading-[1.2] tracking-[-0.03125rem] text-center">
+        <h1 className="font-bold text-2xl leading-[1.2] tracking-[-0.03125rem] text-center">
           Welcome to Note
         </h1>
         <p className="text-[hsla(222,11%,36%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
@@ -56,14 +57,16 @@ const SignIn = () => {
         </p>
       </div>
       <AuthForm onSubmit={onSubmit} mode="login" />
-      <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)]">
+      <div className="flex flex-col text-center pt-6 pb-4 gap-4 border-y border-[hsla(216,19%,90%,1)] dark:border-[hsla(222,11%,36%,1)]">
         <p className="text-[hsla(222,11%,36%,1)]">or login with:</p>
         <GoogleAuthButton />
       </div>
       <div className="flex justify-center items-center gap-1">
-        <p className="text-[hsla(222,11%,36%,1)]">No account yet?</p>
+        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)]">
+          No account yet?
+        </p>
         <Link to="/auth/sign-up">
-          <p>Sign up</p>
+          <p className="text-black dark:text-white">Sign up</p>
         </Link>
       </div>
     </>

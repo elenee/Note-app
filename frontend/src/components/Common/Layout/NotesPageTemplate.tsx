@@ -4,6 +4,7 @@ import type { Note } from "../../../types/note";
 import notesService from "../../../services/notesService";
 import NotesList from "../../Notes/NotesList";
 import Editor from "../../Notes/Editor";
+import { showNoteDeletedToast, showNoteSavedToast } from "../CustomToast";
 
 type NotesProps = {
   notes: Note[];
@@ -89,6 +90,7 @@ const NotesPageTemplate = ({
       });
 
       setSelectedNoteState(finalNote);
+      showNoteSavedToast();
     } catch (error) {
       console.error("Failed to save note:", error);
     }
@@ -105,6 +107,7 @@ const NotesPageTemplate = ({
       await notesService.deleteNote(id, token);
       setNotes((prev) => prev.filter((n) => n.id !== id));
       setSelectedNoteState(null);
+      showNoteDeletedToast();
     } catch (error: any) {
       console.log("Failed to delete note", error.message);
     }

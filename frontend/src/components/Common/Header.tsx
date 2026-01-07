@@ -23,8 +23,8 @@ const Header = ({ onSettingsClick }: IHeaderProps) => {
   }
 
   return (
-    <div className="h-20.25 border-b border-[hsla(216,19%,90%,1)] flex justify-between w-full p-6">
-      <h1 className="text-[hsla(222,32%,8%,1)] font-bold text-[24px] leading-1.2 tracking-[-0.5px]">
+    <div className="h-20.25 border-b border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] flex justify-between w-full p-6">
+      <h1 className="text-[hsla(222,32%,8%,1)] dark:text-white font-bold text-[24px] leading-1.2 tracking-[-0.5px]">
         {title}
       </h1>
       <div className="flex gap-4">

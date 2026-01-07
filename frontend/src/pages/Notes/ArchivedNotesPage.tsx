@@ -3,6 +3,7 @@ import type { Note } from "../../types/note";
 import notesService from "../../services/notesService";
 import NotesPageTemplate from "../../components/Common/Layout/NotesPageTemplate";
 import { useState } from "react";
+import { showNoteRestoredToast } from "../../components/Common/CustomToast";
 
 type NotesProps = {
   notes: Note[];
@@ -41,6 +42,7 @@ const ArchivedNotesPage = () => {
       },
       token
     );
+    showNoteRestoredToast()
   };
 
   return (

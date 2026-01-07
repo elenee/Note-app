@@ -1,8 +1,11 @@
+import Settings from "../../components/Settings/Settings";
 
 const SettingsPage = () => {
   return (
-    <div>SettingsPage</div>
-  )
-}
+    <div className="h-screen">
+      <Settings />
+    </div>
+  );
+};
 
-export default SettingsPage
+export default SettingsPage;
