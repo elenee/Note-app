@@ -35,7 +35,7 @@ const GoogleAuthButton = () => {
   return (
     <button
       onClick={() => login()}
-      className="border rounded-lg border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] px-4 py-3 flex justify-center items-center gap-2 font-medium text-[16px] cursor-pointer"
+      className="border rounded-lg border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] hover:bg-[hsla(216,33%,97%,1)] px-4 py-3 flex justify-center items-center gap-2 font-medium text-[16px] cursor-pointer"
     >
       <img src="/Google.svg" alt="Google" />
       Google

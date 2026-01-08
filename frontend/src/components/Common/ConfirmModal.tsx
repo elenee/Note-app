@@ -1,0 +1,62 @@
+import type React from "react";
+
+type ConfirmModalProps = {
+  isOpen: boolean;
+  isDelete: boolean;
+  title: string;
+  description?: string;
+  icon?: React.ReactNode;
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+};
+
+const ConfirmModal = ({
+  isDelete,
+  title,
+  description,
+  icon,
+  confirmText,
+  cancelText = "Cancel",
+  onConfirm,
+  onCancel,
+}: ConfirmModalProps) => {
+  return (
+    <div
+      className="flex flex-col absolute bg-white dark:bg-[hsla(221,16%,20%,1)] w-110 rounded-lg top-88.5 left-125"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="flex p-5 gap-4">
+        <div className="bg-[hsla(216,26%,96%,1)] dark:bg-[hsla(222,11%,36%,1)] rounded-lg flex justify-center items-center w-8 h-8 p-2">
+          {icon}
+        </div>
+        <div className="flex flex-col">
+          <p className="font-semibold text-[16px]">{title}</p>
+          <p className="text-[14px] text-[hsla(221,16%,20%,1)] dark:text-[hsla(216,19%,90%,1)]">
+            {description}
+          </p>
+        </div>
+      </div>
+      <div className="w-full h-px bg-[hsla(216,26%,96%,1)]"></div>
+      <div className="flex gap-4 px-5 py-4 justify-end">
+        <button
+          className="bg-[hsla(216,26%,96%,1)] text-[hsla(222,11%,36%,1)] px-4 py-3 rounded-lg cursor-pointer"
+          onClick={onCancel}
+        >
+          {cancelText}
+        </button>
+        <button
+          className={`px-4 py-3 text-white rounded-lg cursor-pointer ${
+            isDelete ? "bg-[hsla(355,96%,60%,1)]" : "bg-[hsla(228,100%,60%,1)]"
+          }`}
+          onClick={onConfirm}
+        >
+          {confirmText}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ConfirmModal;

@@ -4,6 +4,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import GoogleAuthButton from "../../components/Auth/GoogleAuthButton";
 import AuthForm from "../../components/Auth/AuthForm";
+import { showInvalidCredentialsToast } from "../../components/Common/CustomToast";
 
 interface AuthFormValues {
   email: string;
@@ -16,7 +17,7 @@ const SignIn = () => {
   const [, setCookie] = useCookies(["accessToken"]);
   const navigate = useNavigate();
 
-  async function onSubmit(data: AuthFormValues, setError: any) {
+  async function onSubmit(data: AuthFormValues) {
     try {
       const res = await axios.post(`${API_URL}/auth/sign-in`, data);
       const token = res.data.accessToken;
@@ -32,14 +33,7 @@ const SignIn = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        setError("password", {
-          type: "manual",
-          message: error.response.data.message,
-        });
-        setError("email", {
-          type: "manual",
-          message: error.response.data.message,
-        });
+        showInvalidCredentialsToast();
       } else {
         console.error("Sign-in error:", error);
       }
@@ -66,7 +60,9 @@ const SignIn = () => {
           No account yet?
         </p>
         <Link to="/auth/sign-up">
-          <p className="text-black dark:text-white">Sign up</p>
+          <p className="text-black dark:text-white cursor-pointer hover:text-[hsla(228,100%,60%,1)]">
+            Sign up
+          </p>
         </Link>
       </div>
     </>

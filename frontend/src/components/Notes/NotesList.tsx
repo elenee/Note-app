@@ -56,10 +56,10 @@ const NotesList = ({
             return (
               <div
                 key={note.id}
-                className={`p-2 rounded-lg flex flex-col gap-3 border-b border-[hsla(216,19%,90%,1)] dark:bg-[hsla(222,32%,8%,1)] dark:text-white ${
+                className={`p-2 flex flex-col gap-3 border-[hsla(216,19%,90%,1)] dark:bg-[hsla(222,32%,8%,1)] dark:border-[hsla(231,16%,16%,1)] dark:text-white cursor-pointer ${
                   isSelected
-                    ? "bg-[hsla(216,26%,96%,1)] dark:bg-[hsla(231,16%,16%,1)]"
-                    : "bg-white"
+                    ? "bg-[hsla(216,26%,96%,1)] dark:bg-[hsla(231,16%,16%,1)] rounded-lg"
+                    : "bg-white border-b"
                 }`}
                 onClick={() => handleSelectedNote(note)}
               >

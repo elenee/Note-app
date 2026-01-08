@@ -11,6 +11,7 @@ import { SignInDto } from './dto/sign-in.dto';
 import * as bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { AuthProvider } from 'src/enums/authProvider.enum';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,10 @@ export class AuthService {
 
   async signUp(signUpDto: SignUpDto) {
     const existingUser = await this.usersService.findByEmail(signUpDto.email);
-    if (existingUser) throw new BadRequestException('user already exists');
+    if (existingUser)
+      throw new BadRequestException(
+        'An account with this email already exists.',
+      );
     const hashedPasswd = await bcrypt.hash(signUpDto.password, 10);
     console.log(hashedPasswd);
     await this.usersService.create({ ...signUpDto, password: hashedPasswd });
@@ -36,7 +40,10 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const existingUser = await this.usersService.findByEmail(signInDto.email);
-    if (!existingUser) throw new UnauthorizedException('invalid credentials');
+    if (!existingUser) {
+      throw new UnauthorizedException('Please enter a valid email address.');
+    }
+
     if (existingUser.authProvider === AuthProvider.GOOGLE) {
       throw new UnauthorizedException('Please sign in with Google');
     }
@@ -44,7 +51,7 @@ export class AuthService {
       signInDto.password,
       existingUser.password,
     );
-    if (!isPasswEqual) throw new UnauthorizedException('invalid credentials');
+    if (!isPasswEqual) throw new UnauthorizedException('Invalid credentials');
     const payload = {
       userId: existingUser._id,
     };
@@ -57,6 +64,42 @@ export class AuthService {
   async currentUser(userId: string) {
     const user = await this.usersService.findOne(userId);
     return user;
+  }
+
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    const user = await this.usersService.findOne(userId);
+
+    const isPasswEqual = await bcrypt.compare(
+      changePasswordDto.oldPassword,
+      user.password,
+    );
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (!changePasswordDto.oldPassword || !changePasswordDto.newPassword) {
+      throw new BadRequestException('Password data missing');
+    }
+
+    if (!changePasswordDto.oldPassword || !user?.password) {
+      throw new BadRequestException('Invalid password data');
+    }
+
+    if (!isPasswEqual) {
+      throw new BadRequestException(
+        'Old password does not match. Please try again.',
+      );
+    }
+
+    const hashedPasswd = await bcrypt.hash(changePasswordDto.newPassword, 10);
+    const updatedUser = await this.usersService.update(userId, {
+      password: hashedPasswd,
+      passwordChangedAt: new Date(),
+    });
+
+    console.log(updatedUser);
+
+    console.log('Password successfully changed');
   }
 
   async onGoogleLogin(code: string) {

@@ -13,7 +13,6 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ForgotPasswordPage/ResetPasswordPage";
 
 const App = () => {
   return (
@@ -40,7 +39,6 @@ const App = () => {
             <Route path="sign-up" element={<SignUp />} />
             <Route index element={<Navigate to="sign-in" />} />
             <Route path="forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="reset-password" element={<ResetPasswordPage />} />
           </Route>
 
           <Route path="/" element={<MainLayout />}>

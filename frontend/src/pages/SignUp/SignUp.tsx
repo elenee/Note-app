@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import GoogleAuthButton from "../../components/Auth/GoogleAuthButton";
 import AuthForm from "../../components/Auth/AuthForm";
+import { showUserCreatedToast } from "../../components/Common/CustomToast";
 
 interface AuthFormValues {
   email: string;
@@ -13,13 +14,20 @@ const API_URL = import.meta.env.VITE_BASE_URL;
 
 const SignUp = () => {
   const navigate = useNavigate();
-  async function onSubmit(data: AuthFormValues) {
+  async function onSubmit(data: AuthFormValues, setError: any) {
     try {
       const res = await axios.post(`${API_URL}/auth/sign-up`, data);
       if (res.status === 201) {
         navigate("/auth/sign-in");
+        showUserCreatedToast();
       }
     } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        setError("email", {
+          type: "manual",
+          message: error.response.data.message,
+        });
+      }
       console.log(error);
     }
   }
@@ -40,7 +48,9 @@ const SignUp = () => {
         <GoogleAuthButton />
       </div>
       <div className="flex justify-center items-center gap-1">
-        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)]">No account yet?</p>
+        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)]">
+          No account yet?
+        </p>
         <Link to="/auth/sign-in">
           <p className="text-black dark:text-white">Sign in</p>
         </Link>

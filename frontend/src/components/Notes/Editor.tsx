@@ -6,7 +6,8 @@ type EditorProps = {
   setSelectedNote: React.Dispatch<React.SetStateAction<Note | null>>;
   onSaveNote: (note: Note) => void;
   onDeleteNote: (id: string) => void;
-  onArchiveOrRestore: (id: string) => void;
+  onArchive: (id: string) => void;
+  onRestore: (id: string) => void;
   handleCancelNote: (id: string) => void;
 };
 
@@ -15,7 +16,8 @@ const Editor = ({
   setSelectedNote,
   onSaveNote,
   onDeleteNote,
-  onArchiveOrRestore,
+  onArchive,
+  onRestore,
   handleCancelNote,
 }: EditorProps) => {
   const [tagsString, setTagsString] = useState(
@@ -23,6 +25,7 @@ const Editor = ({
   );
 
   useEffect(() => {
+    if (!selectedNote) return;
     if (selectedNote) {
       setTagsString(selectedNote.tags.join(", "));
     }
@@ -183,7 +186,7 @@ const Editor = ({
           <div className="bg-[hsla(216,19%,90%,1)] h-px dark:bg-[hsla(231,16%,16%,1)]"></div>
           <div className="flex gap-4">
             <button
-              className="bg-[hsla(228,100%,60%,1)] text-white px-4 py-3 rounded-lg"
+              className="bg-[hsla(228,100%,60%,1)] text-white px-4 py-3 rounded-lg cursor-pointer"
               type="button"
               onClick={() => {
                 if (selectedNote) onSaveNote(selectedNote);
@@ -204,8 +207,12 @@ const Editor = ({
       {selectedNote && !selectedNote.isNew && (
         <div className="flex flex-col py-5 pr-6 gap-3 w-64.5">
           <button
-            className="flex border border-[hsla(219,15%,82%,1)] dark:border-[hsla(231,16%,16%,1)] rounded-lg py-3 px-4 gap-2 items-center"
-            onClick={() => onArchiveOrRestore(selectedNote.id)}
+            className="flex border border-[hsla(219,15%,82%,1)] dark:border-[hsla(231,16%,16%,1)] rounded-lg py-3 px-4 gap-2 items-center cursor-pointer"
+            onClick={() => {
+              selectedNote.status === "archived"
+                ? onRestore(selectedNote.id)
+                : onArchive(selectedNote.id);
+            }}
           >
             {selectedNote.status === "active" ? (
               <svg
@@ -271,7 +278,7 @@ const Editor = ({
               : "Archive Note"}
           </button>
           <button
-            className="flex border border-[hsla(219,15%,82%,1)] dark:border-[hsla(231,16%,16%,1)] rounded-lg py-3 px-4 gap-2 items-center "
+            className="flex border border-[hsla(219,15%,82%,1)] dark:border-[hsla(231,16%,16%,1)] rounded-lg py-3 px-4 gap-2 items-center cursor-pointer"
             onClick={() => onDeleteNote(selectedNote.id)}
           >
             <svg

@@ -54,7 +54,7 @@ const MainLayout = () => {
 
   if (!user) return null;
   return (
-    <div className="flex min-h-screen bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
+    <div className="flex min-h-screen bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white relative">
       <NotesListSidebar notes={notes} />
       <div className="flex flex-col flex-1">
         <Header onSettingsClick={() => navigate("/settings")} />

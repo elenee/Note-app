@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import SettingsButton from "./SettingsButton ";
 
 const Settings = () => {
   const [, removeCookie] = useCookies(["accessToken"]);
@@ -22,23 +23,20 @@ const Settings = () => {
     });
 
     delete axios.defaults.headers.common["Authorization"];
-    console.log(axios.defaults.headers.common["Authorization"]);
 
     console.log("logout click");
   };
 
   const [activeSection, setActiveSection] = useState<
     "color" | "font" | "password" | null
-  >(null);
+  >("color");
 
   return (
     <div className="flex h-screen">
       <div className="pl-8 pr-4 pt-5 flex flex-col w-64.5 gap-2 border-r border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] h-screen">
-        <div className="flex flex-col gap-2 border-b border-[hsla(216,19%,90%,1)] pb-2">
-          <button
-            className="flex items-center gap-2 border rounded-lg p-2 "
-            onClick={() => setActiveSection("color")}
-          >
+        <SettingsButton
+          label="Color Theme"
+          icon={
             <svg
               width="20"
               height="20"
@@ -46,30 +44,39 @@ const Settings = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                d="M10.045 2.5V3.64325M10.045 16.3567V17.5M17.5449 10.0001H16.4017M3.68817 10.0001H2.54492M15.3481 4.69652L14.5398 5.50491M5.55022 14.4948L4.74184 15.3032M15.3481 15.3032L14.5398 14.4948M5.55022 5.5053L4.74184 4.69692"
-                stroke="currentColor"
-                stroke-width="1.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.0451 6.50391C11.9764 6.50391 13.5413 8.06959 13.5413 10.0002C13.5413 11.9315 11.9764 13.4972 10.0451 13.4972C8.1137 13.4972 6.54883 11.9315 6.54883 10.0002C6.54883 8.06959 8.1137 6.50391 10.0451 6.50391Z"
-                stroke="currentColor"
-                stroke-width="1.25"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10.045 2.5V3.64325M10.045 16.3567V17.5M17.5449 10.0001H16.4017M3.68817 10.0001H2.54492M15.3481 4.69652L14.5398 5.50491M5.55022 14.4948L4.74184 15.3032M15.3481 15.3032L14.5398 14.4948M5.55022 5.5053L4.74184 4.69692"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10.0451 6.50391C11.9764 6.50391 13.5413 8.06959 13.5413 10.0002C13.5413 11.9315 11.9764 13.4972 10.0451 13.4972C8.1137 13.4972 6.54883 11.9315 6.54883 10.0002C6.54883 8.06959 8.1137 6.50391 10.0451 6.50391Z"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </svg>
-            Color Theme
-          </button>
-
-          <button
-            className="flex items-center gap-2 border rounded-lg p-2"
-            onClick={() => setActiveSection("font")}
-          >
+          }
+          active={activeSection === "color"}
+          onClick={() => setActiveSection("color")}
+          showArrow
+        />
+        <SettingsButton
+          label="Font Theme"
+          icon={
             <svg
               width="20"
               height="20"
@@ -90,13 +97,14 @@ const Settings = () => {
                 fill="currentColor"
               />
             </svg>
-            Font Theme
-          </button>
-
-          <button
-            className="flex items-center gap-2 border rounded-lg p-2"
-            onClick={() => setActiveSection("password")}
-          >
+          }
+          active={activeSection === "font"}
+          onClick={() => setActiveSection("font")}
+          showArrow
+        />
+        <SettingsButton
+          label="Change Password"
+          icon={
             <svg
               width="20"
               height="20"
@@ -128,12 +136,14 @@ const Settings = () => {
                 stroke-linejoin="round"
               />
             </svg>
-            Change Password
-          </button>
-        </div>
+          }
+          active={activeSection === "password"}
+          onClick={() => setActiveSection("password")}
+          showArrow
+        />
 
         <button
-          className="flex items-center gap-2 border rounded-lg p-2 cursor-pointer"
+          className="flex items-center gap-2 p-2 cursor-pointer"
           onClick={handleLogout}
         >
           <svg
@@ -170,7 +180,6 @@ const Settings = () => {
           <FontTheme selected={fontTheme} onChange={setFontTheme} />
         )}
         {activeSection === "password" && <ChangePassword />}
-        {!activeSection && <p>Select a setting from the sidebar</p>}
       </div>
     </div>
   );

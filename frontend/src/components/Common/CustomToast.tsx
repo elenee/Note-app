@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 interface CustomToastProps {
   message: string;
-  type?: "success";
+  type?: "success" | "error";
   icon?: ReactNode;
 }
 
@@ -26,7 +26,24 @@ const CustomToast = ({ message, type = "success", icon }: CustomToastProps) => {
           />
         </svg>
       </div>
-    ) : null;
+    ) : (
+      <div className="inline-flex items-center justify-center p-px shrink-0 w-4 h-4 text-white bg-red-500 rounded-[50%] dark:bg-red-900">
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </div>
+    );
 
   return (
     <div className="flex items-center w-full max-w-97.5 h-8 p-2 space-x-4 bg-white border border-[hsla(216,19%,90%,1)] rounded-lg shadow-lg dark:bg-gray-800">
@@ -56,12 +73,36 @@ export const showSuccessToast = (message: string) => {
   showToast(message, "success");
 };
 
+export const showErrorToast = (message: string) => {
+  showToast(message, "error");
+};
+
 export const showNoteSavedToast = () => {
   showSuccessToast("Note saved successfully!");
 };
 
+export const showNoteUpdatedToast = () => {
+  showSuccessToast("Note updated successfully!");
+};
+
 export const showNoteDeletedToast = () => {
-  showSuccessToast("Note deleted successfully!");
+  showSuccessToast("Note permanently deleted.");
+};
+
+export const showSettingsUpdatedToast = () => {
+  showSuccessToast("Settings updated successfully!");
+};
+
+export const showPasswordUpdatedToast = () => {
+  showSuccessToast("Password changed successfully!");
+};
+
+export const showInvalidCredentialsToast = () => {
+  showErrorToast("Invalid credentials");
+};
+
+export const showUserCreatedToast = () => {
+  showSuccessToast("User created successfully");
 };
 
 export const showNoteArchivedToast = () => {

@@ -99,7 +99,7 @@ const FontTheme = ({ selected, onChange }: FontThemeProps) => {
     root.style.setProperty("--app-font", map[font]);
     localStorage.setItem("font-theme", font);
 
-    onChange(font); 
+    onChange(font);
   };
 
   return (

@@ -36,7 +36,7 @@ const Header = ({ onSettingsClick }: IHeaderProps) => {
             className="w-full text-sm placeholder:text-xs outline-none bg-transparent"
           />
         </div>
-        <button onClick={onSettingsClick}>
+        <button onClick={onSettingsClick} className="cursor-pointer">
           <img src="/Setting.svg" alt="settings logo" />
         </button>
       </div>

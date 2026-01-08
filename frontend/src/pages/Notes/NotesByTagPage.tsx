@@ -3,6 +3,10 @@ import type { Note } from "../../types/note";
 import NotesPageTemplate from "../../components/Common/Layout/NotesPageTemplate";
 import { useState } from "react";
 import notesService from "../../services/notesService";
+import {
+  showNoteArchivedToast,
+  showNoteRestoredToast,
+} from "../../components/Common/CustomToast";
 
 type NotesProps = {
   notes: Note[];
@@ -46,6 +50,12 @@ const NotesByTagPage = () => {
       },
       token
     );
+
+    setSelectedNote(null);
+
+    updatedStatus === "active"
+      ? showNoteRestoredToast()
+      : showNoteArchivedToast();
   };
 
   return (

@@ -6,25 +6,40 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  constructor(
+    private jwtService: JwtService,
+    private usersService: UsersService,
+  ) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.getToken(request.headers);
-    if (!token) throw new BadRequestException();
+    if (!token) throw new BadRequestException('No token provided');
 
+    let payload: any;
     try {
-      const payload = this.jwtService.verify(token);
+      payload = this.jwtService.verify(token);
       request.userId = payload.userId;
       console.log(request.userId);
     } catch (error) {
-      throw new UnauthorizedException('');
+      throw new UnauthorizedException('Invalid or expired token');
     }
+
+    const user = await this.usersService.findOne(payload.userId);
+    if (!user) {
+      throw new UnauthorizedException('user not found');
+    }
+
+    if (
+      user.passwordChangedAt &&
+      payload.iat * 1000 < user.passwordChangedAt.getTime()
+    ) {
+      throw new UnauthorizedException('password has changed');
+    }
+
     return true;
   }
 

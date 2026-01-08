@@ -6,7 +6,7 @@ import { User } from 'src/decorators/user.decorator';
 export class Note {
   @Prop({ type: String, required: true })
   title: string;
-  @Prop({ type: [String] })
+  @Prop({ type: [String], required: true })
   tags: string[];
   @Prop({ type: String, required: true })
   content: string;

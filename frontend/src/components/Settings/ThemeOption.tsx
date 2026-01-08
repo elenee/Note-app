@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { showSettingsUpdatedToast } from "../Common/CustomToast";
 
 export type ThemeOptionItem<T> = {
   label: string;
@@ -81,11 +81,7 @@ const ThemeOption = <T extends string>({
           disabled={!hasChanges}
           onClick={() => {
             onChange(pendingSelected);
-            toast.success(
-              <div className="w-97.5 h-8 flex justify-between text-[12px] items-center">
-                <p className="">Settings updated successfully!</p>
-              </div>
-            );
+            showSettingsUpdatedToast()
           }}
           className={`px-4 py-3 rounded-lg text-white transition
             ${

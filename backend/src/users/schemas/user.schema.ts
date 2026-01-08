@@ -20,6 +20,9 @@ export class User {
 
   @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: Note.name, default: [] })
   notes: [mongoose.Schema.Types.ObjectId];
+
+  @Prop({ type: Date, default: null })
+  passwordChangedAt?: Date;
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

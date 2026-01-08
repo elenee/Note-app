@@ -61,10 +61,37 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
             type="email"
             placeholder="email@example.com"
             {...register("email")}
-            className="border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] dark:text-[hsla(221,8%,48%,1)]"
+            className={`border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] dark:text-[hsla(221,8%,48%,1)] 
+            cursor-pointer hover:bg-[hsla(216,33%,97%,1)] focus:ring-3 focus:ring-[hsla(221,8%,48%,1)]  ${errors.email ? "border-[hsla(355,96%,60%,1)]" : ""}`}
           />
           {errors.email && (
-            <p className="text-red-500">{errors.email?.message}</p>
+            <div className="flex gap-2 items-center">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 8C2 11.3133 4.68605 14 8 14C11.3139 14 14 11.3133 14 8C14 4.68605 11.3139 2 8 2C4.68605 2 2 4.68605 2 8Z"
+                  stroke="#FB3748"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.0038 10.4621V7.59573V10.4621ZM8 5.5695V5.52734V5.5695Z"
+                  fill="#FB3748"
+                />
+                <path
+                  d="M8.0038 10.4621V7.59573M8 5.5695V5.52734"
+                  stroke="#FB3748"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <p className="text-red-500">{errors.email?.message}</p>
+            </div>
           )}
         </div>
         <div className="flex flex-col gap-1.5">
@@ -76,7 +103,10 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
               Password
             </label>
             {mode === "login" && (
-              <Link to="/auth/forgot-password" className="underline">
+              <Link
+                to="/auth/forgot-password"
+                className="underline text-[hsla(222,11%,36%,1)] dark:text-[hsla(220,11%,64%,1)] cursor-pointer hover:text-[hsla(228,100%,60%,1)]"
+              >
                 forgot
               </Link>
             )}
@@ -85,7 +115,8 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
             <input
               type={isVisible ? "text" : "password"}
               {...register("password")}
-              className="w-full border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)]"
+              className={`w-full border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] 
+              cursor-pointer hover:bg-[hsla(216,33%,97%,1)] focus:ring-3 focus:ring-[hsla(221,8%,48%,1)] ${errors.password ? "border-[hsla(355,96%,60%,1)]" : ""}`}
             />
             <button
               className="absolute bottom-3.75 right-3 cursor-pointer"
@@ -115,14 +146,41 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
             </button>
           </div>
           {errors.password && (
-            <p className="text-red-500">{errors.password?.message}</p>
+            <div className="flex gap-2 items-center">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 8C2 11.3133 4.68605 14 8 14C11.3139 14 14 11.3133 14 8C14 4.68605 11.3139 2 8 2C4.68605 2 2 4.68605 2 8Z"
+                  stroke="#FB3748"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.0038 10.4621V7.59573V10.4621ZM8 5.5695V5.52734V5.5695Z"
+                  fill="#FB3748"
+                />
+                <path
+                  d="M8.0038 10.4621V7.59573M8 5.5695V5.52734"
+                  stroke="#FB3748"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <p className="text-red-500">{errors.password?.message}</p>
+            </div>
           )}
         </div>
         <button
           disabled={isSubmitting}
-          className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer"
+          className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg 
+          cursor-pointer hover:bg-[hsla(228,70%,48%,1)] focus:ring-2 focus:ring-[hsla(221,8%,48%,1)]"
         >
-          {mode === "login" ? "Sign In" : "Sign Up"}
+          {mode === "login" ? "Login" : "Sign Up"}
         </button>
       </form>
     </div>

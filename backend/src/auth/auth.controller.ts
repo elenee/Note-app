@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,13 @@ export class AuthController {
 
   @Post('google-login')
   onGoogleLogin(@Body('code') code: string) {
-    return this.authService.onGoogleLogin(code)
+    return this.authService.onGoogleLogin(code);
   }
+
+  @UseGuards(AuthGuard)
+  @Patch('change-password')
+  changePassword(@User() userId, @Body() changePasswordDto: ChangePasswordDto) {
+    return this.authService.changePassword(userId, changePasswordDto);
+  }
+
 }
