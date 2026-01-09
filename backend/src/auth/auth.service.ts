@@ -108,7 +108,7 @@ export class AuthService {
     try {
       const { tokens } = await this.client.getToken({
         code,
-        redirect_uri: 'http://localhost:5173',
+        redirect_uri: process.env.REDIRECT_URI,
       });
       console.log('Tokens from Google:', tokens);
       const idToken = tokens.id_token;
