@@ -179,6 +179,7 @@ const Editor = ({
           <textarea
             className="h-141.75"
             value={content}
+            placeholder="Start typing your note here…"
             onChange={(e) =>
               setSelectedNote({ ...selectedNote, content: e.target.value })
             }

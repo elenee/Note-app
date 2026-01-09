@@ -46,7 +46,7 @@ const SignIn = () => {
         <h1 className="font-bold text-2xl leading-[1.2] tracking-[-0.03125rem] text-center">
           Welcome to Note
         </h1>
-        <p className="text-[hsla(222,11%,36%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
+        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
           Please log in to continue
         </p>
       </div>

@@ -26,6 +26,12 @@ const NotesByTagPage = () => {
   const tagName = pathname.split("/tags/")[1];
   const tag = decodeURIComponent(tagName);
 
+  const normalizedTag = tagName.trim().toLowerCase();
+
+  const filteredNotes = notes.filter((note: Note) =>
+    note.tags?.map((t) => t.toLowerCase()).includes(normalizedTag)
+  );
+
   const handleCreateNote = () => {
     navigate("/notes", { state: { create: true } });
   };
@@ -61,7 +67,8 @@ const NotesByTagPage = () => {
   return (
     <div>
       <NotesPageTemplate
-        filter={(note) => note.tags.includes(tag)}
+        notes={filteredNotes}
+        setNotes={setNotes}
         onArchiveOrRestore={handleArchiveOrRestore}
         onNoteCreation={handleCreateNote}
         selectedNote={selectedNote}

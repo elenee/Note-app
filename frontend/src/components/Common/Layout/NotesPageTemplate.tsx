@@ -1,17 +1,14 @@
-import { useOutletContext } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import type { Note } from "../../../types/note";
 import notesService from "../../../services/notesService";
 import NotesList from "../../Notes/NotesList";
 import Editor from "../../Notes/Editor";
-import { showNoteDeletedToast, showNoteSavedToast, showNoteUpdatedToast } from "../CustomToast";
+import {
+  showNoteDeletedToast,
+  showNoteSavedToast,
+  showNoteUpdatedToast,
+} from "../CustomToast";
 import ConfirmModal from "../ConfirmModal";
-
-type NotesProps = {
-  notes: Note[];
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
-  token: string;
-};
 
 const DeleteIcon = () => (
   <svg
@@ -85,7 +82,9 @@ const ArchiveIcon = () => (
 );
 
 type NotesPageTemplateProps = {
-  filter: (note: Note) => boolean;
+  notes: Note[];
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  token?: string;
   onArchiveOrRestore: (id: string) => void;
   infoMessage?: React.ReactNode;
   emptyMessage?: React.ReactNode;
@@ -96,7 +95,9 @@ type NotesPageTemplateProps = {
 };
 
 const NotesPageTemplate = ({
-  filter,
+  notes,
+  setNotes,
+  token,
   onArchiveOrRestore,
   infoMessage,
   emptyMessage,
@@ -105,15 +106,12 @@ const NotesPageTemplate = ({
   selectedNote: selectedNoteProp,
   setSelectedNote: setSelectedNoteProp,
 }: NotesPageTemplateProps) => {
-  const { notes, setNotes, token } = useOutletContext<NotesProps>();
   const [selectedNoteInternal, setSelectedNoteInternal] = useState<Note | null>(
     null
   );
   const [modalType, setModalType] = useState<"delete" | "archive" | null>(null);
   const [modalNoteId, setModalNoteId] = useState<string | null>(null);
   const prevTagsRef = useRef<string[]>(selectedNoteInternal?.tags ?? []);
-
-  const filteredNotes = notes.filter(filter);
 
   const selectedNoteState = selectedNoteProp ?? selectedNoteInternal;
   const setSelectedNoteState = setSelectedNoteProp ?? setSelectedNoteInternal;
@@ -140,6 +138,10 @@ const NotesPageTemplate = ({
   };
 
   const handleSaveNote = async (note: Note) => {
+    if (!token) {
+      console.warn("No token, skipping save");
+      return;
+    }
     try {
       const dto = {
         title: note.title,
@@ -167,12 +169,11 @@ const NotesPageTemplate = ({
 
       setSelectedNoteState(finalNote);
 
-      if(note.isNew) {
+      if (note.isNew) {
         showNoteSavedToast();
       } else {
-        showNoteUpdatedToast()
+        showNoteUpdatedToast();
       }
-
     } catch (error) {
       console.error("Failed to save note:", error);
     }
@@ -184,6 +185,10 @@ const NotesPageTemplate = ({
   };
 
   const handleDeleteNote = async (id: string) => {
+    if (!token) {
+      console.warn("No token, skipping save");
+      return;
+    }
     if (!id) return;
     try {
       await notesService.deleteNote(id, token);
@@ -229,7 +234,7 @@ const NotesPageTemplate = ({
     <div className="flex gap-10">
       <div>
         <NotesList
-          notes={filteredNotes}
+          notes={notes}
           handleSelectedNote={setSelectedNoteState}
           selectedNote={selectedNoteState}
           onNoteCreation={createHandler}

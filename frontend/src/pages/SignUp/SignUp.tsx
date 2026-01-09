@@ -38,7 +38,7 @@ const SignUp = () => {
         <h1 className="font-sans font-bold text-2xl leading-[1.2] tracking-[-0.03125rem] text-center">
           Create Your Account
         </h1>
-        <p className="text-[hsla(222,11%,36%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
+        <p className="text-[hsla(222,11%,36%,1)] dark:text-[hsla(219,15%,82%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
           Sign up to start organizing your notes and boost your productivity.
         </p>
       </div>

@@ -61,7 +61,7 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
             type="email"
             placeholder="email@example.com"
             {...register("email")}
-            className={`border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] dark:text-[hsla(221,8%,48%,1)] 
+            className={`border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] dark:text-[hsla(221,8%,48%,1)] dark:hover:bg-[hsla(231,16%,16%,1)]
             cursor-pointer hover:bg-[hsla(216,33%,97%,1)] focus:ring-3 focus:ring-[hsla(221,8%,48%,1)]  ${errors.email ? "border-[hsla(355,96%,60%,1)]" : ""}`}
           />
           {errors.email && (
@@ -115,8 +115,9 @@ const AuthForm = ({ onSubmit, mode }: IAuthFormProps) => {
             <input
               type={isVisible ? "text" : "password"}
               {...register("password")}
-              className={`w-full border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] 
+              className={`w-full border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] dark:hover:bg-[hsla(231,16%,16%,1)]
               cursor-pointer hover:bg-[hsla(216,33%,97%,1)] focus:ring-3 focus:ring-[hsla(221,8%,48%,1)] ${errors.password ? "border-[hsla(355,96%,60%,1)]" : ""}`}
+              
             />
             <button
               className="absolute bottom-3.75 right-3 cursor-pointer"

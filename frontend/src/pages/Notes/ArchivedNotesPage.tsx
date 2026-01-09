@@ -16,6 +16,8 @@ const ArchivedNotesPage = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const navigate = useNavigate();
 
+  const archivedNotes = notes.filter((note) => note.status === "archived");
+
   const handleCreateNote = () => {
     navigate("/notes", { state: { create: true } });
   };
@@ -42,13 +44,14 @@ const ArchivedNotesPage = () => {
       },
       token
     );
-    showNoteRestoredToast()
+    showNoteRestoredToast();
   };
 
   return (
     <div>
       <NotesPageTemplate
-        filter={(note) => note.status === "archived"}
+        notes={archivedNotes}
+        setNotes={setNotes}
         onArchiveOrRestore={handleArchiveOrRestore}
         onNoteCreation={handleCreateNote}
         selectedNote={selectedNote}

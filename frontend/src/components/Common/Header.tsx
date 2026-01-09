@@ -2,14 +2,22 @@ import { useLocation } from "react-router-dom";
 
 interface IHeaderProps {
   onSettingsClick: () => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
-const Header = ({ onSettingsClick }: IHeaderProps) => {
+const Header = ({
+  onSettingsClick,
+  searchQuery,
+  setSearchQuery,
+}: IHeaderProps) => {
   const location = useLocation();
   let title = "";
 
   const pathname = location.pathname;
-  if (pathname === "/notes" || pathname === "/") {
+  if (searchQuery.trim()) {
+    title = `Showing results for: ${searchQuery}`;
+  } else if (pathname === "/notes" || pathname === "/") {
     title = "All Notes";
   } else if (pathname === "/archived") {
     title = "Archived Notes";
@@ -33,6 +41,8 @@ const Header = ({ onSettingsClick }: IHeaderProps) => {
           <input
             type="text"
             placeholder="Search by title, content, or tags…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full text-sm placeholder:text-xs outline-none bg-transparent"
           />
         </div>

@@ -16,6 +16,7 @@ const AllNotesPage = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const location = useLocation();
   const state = location.state as { create?: boolean } | undefined;
+  const activeNotes = notes.filter((note) => note.status === "active");
 
   const handleArchiveOrRestore = async (id: string) => {
     const note = notes.find((n) => n.id === id);
@@ -45,7 +46,9 @@ const AllNotesPage = () => {
   return (
     <div>
       <NotesPageTemplate
-        filter={(note) => note.status === "active"}
+        notes={activeNotes}
+        setNotes={setNotes}
+        token={token}
         onArchiveOrRestore={handleArchiveOrRestore}
         selectedNote={selectedNote}
         setSelectedNote={setSelectedNote}
