@@ -5,6 +5,9 @@ import { SignInDto } from './dto/sign-in.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { ChangePasswordDto } from './dto/changePassword.dto';
+import { SendEmailDto } from './dto/sendEmail.dto';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
+import { ResetPasswordDto } from './dto/resetPasswordDto.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -37,4 +40,13 @@ export class AuthController {
     return this.authService.changePassword(userId, changePasswordDto);
   }
 
+  @Post('verify-email')
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
+  }
 }

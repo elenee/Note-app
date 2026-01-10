@@ -1,13 +1,10 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import authService from "../../services/authService";
 
 interface AuthFormValues {
   email: string;
-}
-
-interface IAuthFormProps {
-  onSubmit?: (data: any, setError: any) => void;
 }
 
 const schema = yup.object({
@@ -18,13 +15,26 @@ const schema = yup.object({
     .required("Email is required"),
 });
 
-const ForgotPasswordPage = ({ onSubmit }: IAuthFormProps) => {
+const ForgotPasswordPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
   } = useForm<AuthFormValues>({ resolver: yupResolver(schema) });
+
+  const onSubmit = async (data: { email: string }, setError: any) => {
+    try {
+      const res = await authService.forgotPassword(data.email);
+      setError("email", {
+        type: "manual",
+        message: res.message,
+      });
+    } catch (error: any) {
+      setError("email", { message: error.response?.data?.message || "Failed" });
+      console.log(error.message);
+    }
+  };
 
   return (
     <form

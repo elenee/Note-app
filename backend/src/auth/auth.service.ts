@@ -12,6 +12,10 @@ import * as bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { AuthProvider } from 'src/enums/authProvider.enum';
 import { ChangePasswordDto } from './dto/changePassword.dto';
+import { SendEmailDto } from './dto/sendEmail.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
+import { ResetPasswordDto } from './dto/resetPasswordDto.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +23,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private readonly mailerService: MailerService,
   ) {
     this.client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
@@ -33,7 +38,6 @@ export class AuthService {
         'An account with this email already exists.',
       );
     const hashedPasswd = await bcrypt.hash(signUpDto.password, 10);
-    console.log(hashedPasswd);
     await this.usersService.create({ ...signUpDto, password: hashedPasswd });
     return 'user created successfully';
   }
@@ -139,5 +143,74 @@ export class AuthService {
       console.error(err);
       throw new BadRequestException('Google login failed');
     }
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const user = (await this.usersService.findByEmail(
+      forgotPasswordDto.email,
+    )) as any;
+
+    if (!user) {
+      return 'Reset link will be sent';
+    }
+
+    const payload = {
+      userId: user._id,
+    };
+
+    const accessToken = await this.jwtService.sign(payload, {
+      expiresIn: '1h',
+    });
+
+    const resetLink = `${process.env.VITE_FRONTEND_URL}/reset-password?token=${accessToken}`;
+
+    const sendEmailDto: SendEmailDto = {
+      from: '"No Reply" <noreply@example.com>',
+      to: [forgotPasswordDto.email],
+      subject: 'Reset your password',
+      name: user.name || user.email,
+      link: resetLink,
+    };
+    console.log('Sending email to:', sendEmailDto.to);
+
+    console.log('accessToken: ', accessToken);
+    try {
+      await this.sendEmail(sendEmailDto);
+      console.log('resetLink: ', resetLink);
+
+      return { message: 'Reset link sent successfully' };
+    } catch (error) {
+      console.error('Error sending email:', error);
+      return { message: 'Failed to send reset link' };
+    }
+  }
+
+  async sendEmail(sendEmailDto: SendEmailDto) {
+    console.log('Sending email to:', sendEmailDto.to);
+    try {
+      const result = await this.mailerService.sendMail({
+        from: sendEmailDto.from,
+        to: sendEmailDto.to,
+        subject: sendEmailDto.subject,
+        template: 'reset-password',
+        context: {
+          name: sendEmailDto.name,
+          link: sendEmailDto.link,
+        },
+      });
+      console.log('Mail sent result:', result);
+      return result;
+    } catch (error) {
+      console.error('Mailer error:', error);
+      throw error;
+    }
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const payload = await this.jwtService.verify(resetPasswordDto.token);
+    const userId = payload.userId;
+    const hashedPasswd = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+    await this.usersService.update(userId, { password: hashedPasswd });
+    return 'Password successfully reset';
   }
 }

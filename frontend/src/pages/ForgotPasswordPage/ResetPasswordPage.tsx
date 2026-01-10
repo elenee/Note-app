@@ -2,11 +2,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { showPasswordUpdatedToast } from "../Common/CustomToast";
 
 const InfoIcon = () => (
   <svg
@@ -58,16 +55,10 @@ const EyeIcon = () => (
   </svg>
 );
 
-type ChangePasswordForm = {
-  oldPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-};
-
 const schema = yup.object({
-  oldPassword: yup.string().required("old password is required"),
   newPassword: yup
     .string()
+    .required()
     .min(8, "Password must be at least 8 characters")
     .required("New password is required"),
   confirmNewPassword: yup
@@ -76,8 +67,15 @@ const schema = yup.object({
     .required("Confirm new password"),
 });
 
-const ChangePassword = () => {
-  const [cookies, removeCookie] = useCookies(["accessToken"]);
+type ChangePasswordForm = {
+  newPassword: string;
+  confirmNewPassword: string;
+};
+
+const ResetPasswordPage = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const token = query.get("token");
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState({
@@ -89,83 +87,35 @@ const ChangePassword = () => {
   const toggleVisibility = (field: keyof typeof visible) => {
     setVisible((prev) => ({ ...prev, [field]: !prev[field] }));
   };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = async (data: ChangePasswordForm) => {
+    if (!token) return alert("Invalid token");
     try {
-      await authService.changePassword(
-        {
-          oldPassword: data.oldPassword,
-          newPassword: data.newPassword,
-        },
-        cookies.accessToken
-      );
-
-      showPasswordUpdatedToast();
-
-      removeCookie("accessToken", {
-        path: "/",
-        secure: import.meta.env.PROD,
-        sameSite: "lax",
-      });
-
-      delete axios.defaults.headers.common["Authorization"];
-
-      navigate("/auth/signin");
+      await authService.resetPassword(data.confirmNewPassword, token);
+      navigate("/auth/sign-in");
+      alert("Password reset successfully");
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        setError("oldPassword", {
-          type: "manual",
-          message: error.response.data.message,
-        });
-      }
-      console.log("could not change password", error.message);
+      console.log(error.message);
     }
   };
 
   return (
-    <div className="w-132 flex flex-col gap-6">
-      <h1 className="text-[16px] text-[hsla(222,32%,8%,1)] font-semibold">
-        Change Password
-      </h1>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-1.5">
-          <div className="flex justify-between">
-            <label
-              htmlFor=""
-              className="text-[hsla(222,32%,8%,1)] text-[14px] font-medium leading-[1.2] tracking-[-0.0125rem] mb-px dark:text-white"
-            >
-              Old Password
-            </label>
-          </div>
-          <div className="relative">
-            <input
-              type={visible.old ? "text" : "password"}
-              {...register("oldPassword")}
-              className={`w-full border rounded-lg px-4 py-3 border-[hsla(219,15%,82%,1)] dark:border-[hsla(222,11%,36%,1)] ${
-                errors.oldPassword ? "border-[hsla(355,96%,60%,1)]" : ""
-              }`}
-            />
-            <button
-              className="absolute bottom-3.75 right-3 cursor-pointer"
-              type="button"
-              onClick={() => toggleVisibility("old")}
-            >
-              <EyeIcon />
-            </button>
-          </div>
-          {errors.oldPassword && (
-            <div className="flex items-center gap-2">
-              <InfoIcon />
-              <p className="text-red-500">{errors.oldPassword?.message}</p>
-            </div>
-          )}
-        </div>
+    <form className="flex flex-col gap-10" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col text-center gap-2">
+        <h1 className="font-bold text-2xl leading-[1.2] tracking-[-0.03125rem] text-center">
+          Reset Your Password
+        </h1>
+        <p className="text-[hsla(222,11%,36%,1)] font-sans font-normal text-sm leading-[1.3] tracking-[-0.0125rem] text-center">
+          Choose a new password to secure your account.
+        </p>
+      </div>
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between">
             <label
@@ -232,14 +182,12 @@ const ChangePassword = () => {
             </div>
           )}
         </div>
-        <div className="flex justify-end w-full">
-          <button className="px-4 py-3 rounded-lg text-white bg-[hsla(228,100%,60%,1)]">
-            Save Password
-          </button>
-        </div>
-      </form>
-    </div>
+      </div>
+      <button className="px-4 py-3 rounded-lg text-white bg-[hsla(228,100%,60%,1)]">
+        Reset Password
+      </button>
+    </form>
   );
 };
 
-export default ChangePassword;
+export default ResetPasswordPage;
