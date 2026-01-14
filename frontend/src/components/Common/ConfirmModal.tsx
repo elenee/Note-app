@@ -24,7 +24,7 @@ const ConfirmModal = ({
 }: ConfirmModalProps) => {
   return (
     <div
-      className="flex flex-col absolute bg-white dark:bg-[hsla(221,16%,20%,1)] w-110 rounded-lg top-88.5 left-125"
+      className="flex flex-col absolute bg-white dark:bg-[hsla(221,16%,20%,1)] w-110 rounded-lg top-[50%] left-[50%] translate-x-[-50%] -translate-y-[50%]"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex p-5 gap-4">

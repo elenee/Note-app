@@ -64,21 +64,23 @@ const MainLayout = () => {
 
   if (!user) return null;
   return (
-    <div className="flex min-h-screen bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white relative">
+    <div className="flex h-screen overflow-auto bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white relative">
       <NotesListSidebar notes={notes} />
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 min-w-0">
         <Header
           onSettingsClick={() => navigate("/settings")}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
-        <Outlet
-          context={{
-            notes: filteredNotes,
-            setNotes,
-            token: cookies.accessToken,
-          }}
-        />
+        <div className="flex-1 overflow-auto">
+          <Outlet
+            context={{
+              notes: filteredNotes,
+              setNotes,
+              token: cookies.accessToken,
+            }}
+          />
+        </div>
       </div>
     </div>
   );

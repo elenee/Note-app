@@ -26,7 +26,7 @@ const ThemeOption = <T extends string>({
   const hasChanges = pendingSelected !== selected;
 
   return (
-    <div className="flex flex-col gap-6 items-start w-132">
+    <div className="flex flex-col gap-6 items-start w-full max-w-132">
       <div>
         <h2 className="text-[16px] font-semibold text-[hsla(222,32%,8%,1)] dark:text-white">
           {title}

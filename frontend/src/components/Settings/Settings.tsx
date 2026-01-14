@@ -32,8 +32,8 @@ const Settings = () => {
   >("color");
 
   return (
-    <div className="flex h-screen">
-      <div className="pl-8 pr-4 pt-5 flex flex-col w-64.5 gap-2 border-r border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] h-screen">
+    <div className="flex">
+      <div className="w-72.5 max-xl:w-58 min-w-50 shrink-0 pl-8 pr-4 pt-5 flex flex-col gap-2 border-r border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] h-screen">
         <SettingsButton
           label="Color Theme"
           icon={
@@ -172,7 +172,7 @@ const Settings = () => {
         </button>
       </div>
 
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-6 w-full">
         {activeSection === "color" && (
           <ColorTheme selected={colorTheme} onChange={setColorTheme} />
         )}

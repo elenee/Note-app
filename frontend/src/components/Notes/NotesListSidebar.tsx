@@ -39,7 +39,7 @@ const NotesListSidebar = ({ notes }: NotesListSidebarProps) => {
   const pathname = location.pathname;
 
   return (
-    <div className="w-68 flex flex-col gap-4 items-start py-3 px-4 border-r border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)]">
+    <div className="max-w-68 shrink-0 flex flex-col gap-4 items-start py-3 px-4 border-r border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)]">
       <Logo />
       <div className="flex flex-col items-start gap-1 w-full">
         <div

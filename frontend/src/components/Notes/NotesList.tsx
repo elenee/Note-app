@@ -32,14 +32,14 @@ const NotesList = ({
     });
 
   return (
-    <div className="w-72.5 border-r h-screen border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] pl-8 pr-4 pt-5 pb-6 flex flex-col gap-4 scroll bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
+    <div className="w-72.5 max-xl:w-58 min-w-50 shrink-0 border-r h-screen border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] pl-8 pr-4 pt-5 pb-6 flex flex-col gap-4 bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
       <button
         onClick={onNoteCreation}
-        className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer"
+        className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer w-full md:w-auto"
       >
         + Create New Note
       </button>
-      <div className="overflow-y-auto flex flex-col gap-4">
+      <div className="overflow-y-auto flex flex-col gap-4 flex-1">
         {infoMessage && (
           <p className="p-2 rounded-lg text-[14px] text-[hsla(222,32%, 8%,1)] leading-[1.2] mb-px tracking-[-0.2px]">
             {infoMessage}

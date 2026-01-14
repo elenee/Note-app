@@ -231,7 +231,7 @@ const NotesPageTemplate = ({
   };
 
   return (
-    <div className="flex gap-10">
+    <div className="flex">
       <div>
         <NotesList
           notes={notes}
