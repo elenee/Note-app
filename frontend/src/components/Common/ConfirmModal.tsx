@@ -1,4 +1,5 @@
 import type React from "react";
+import { motion } from "motion/react";
 
 type ConfirmModalProps = {
   isOpen: boolean;
@@ -23,7 +24,13 @@ const ConfirmModal = ({
   onCancel,
 }: ConfirmModalProps) => {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.4,
+        scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+      }}
       className="flex flex-col absolute bg-white dark:bg-[hsla(221,16%,20%,1)] w-110 rounded-lg top-[50%] left-[50%] translate-x-[-50%] -translate-y-[50%]"
       onClick={(e) => e.stopPropagation()}
     >
@@ -55,7 +62,7 @@ const ConfirmModal = ({
           {confirmText}
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

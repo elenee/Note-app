@@ -31,12 +31,12 @@ const Header = ({
   }
 
   return (
-    <div className="h-20.25 border-b border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] flex justify-between w-full p-6">
+    <div className="border-b border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] flex items-center justify-between w-full p-6">
       <h1 className="text-[hsla(222,32%,8%,1)] dark:text-white font-bold text-[24px] leading-1.2 tracking-[-0.5px]">
         {title}
       </h1>
       <div className="flex gap-4">
-        <div className="flex items-center w-75 border rounded-lg border-[hsla(219,15%,82%,1)] px-4 py-4 gap-2">
+        <div className="flex items-center w-75 border rounded-lg border-[hsla(219,15%,82%,1)] px-4 py-3 gap-2">
           <img src="/Search.svg" alt="" className="w-5 h-5" />
           <input
             type="text"

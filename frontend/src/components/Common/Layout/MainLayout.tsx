@@ -8,6 +8,7 @@ import type { Note } from "../../../types/note";
 import authService from "../../../services/authService";
 import notesService from "../../../services/notesService";
 import "react-toastify/dist/ReactToastify.css";
+import { Loader } from "../../Loader/Loader";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const MainLayout = () => {
   }, [cookies.accessToken, navigate, removeCookie]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (!user) return null;

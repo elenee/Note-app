@@ -46,7 +46,7 @@ const CustomToast = ({ message, type = "success", icon }: CustomToastProps) => {
     );
 
   return (
-    <div className="flex items-center w-full max-w-97.5 h-8 p-2 space-x-4 bg-white border border-[hsla(216,19%,90%,1)] rounded-lg shadow-lg dark:bg-gray-800">
+    <div className="flex items-center w-full max-w-97.5 h-8 p-2 space-x-4 bg-white border border-[hsla(216,19%,90%,1)] dark:border-[hsla(221,16%,20%,1)] rounded-lg shadow-lg dark:bg-gray-800">
       {icon || defaultIcon}
       <div className="text-[12px] font-normal text-gray-900 dark:text-white">
         {message}

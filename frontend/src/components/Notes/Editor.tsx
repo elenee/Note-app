@@ -65,7 +65,7 @@ const Editor = ({
         <form className="h-full flex flex-col gap-4">
           <input
             type="text"
-            className="w-full bg-transparent border-none outline-none text-[24px] font-bold"
+            className="w-full bg-transparent border-none outline-none text-[24px] font-bold focus:ring focus:rounded-lg focus:rind-[hsla(216,19%,90%,1)]"
             value={title}
             onChange={(e) =>
               setSelectedNote({ ...selectedNote, title: e.target.value })
@@ -105,7 +105,7 @@ const Editor = ({
               </label>
               <input
                 type="text"
-                className="bg-transparent border-none outline-none text-[14px] w-full"
+                className="bg-transparent border-none outline-none text-[14px] w-full focus:ring focus:rounded-lg focus:rind-[hsla(216,19%,90%,1)]"
                 value={tagsString}
                 onChange={handleTagsChange}
                 placeholder="Add tags separated by commas (e.g. Work, Planning)"
@@ -177,7 +177,7 @@ const Editor = ({
           </div>
           <div className="bg-[hsla(216,19%,90%,1)] h-px dark:bg-[hsla(231,16%,16%,1)]"></div>
           <textarea
-            className="flex-1 max-h-125 w-full resize-none bg-transparent border-none outline-none"
+            className="flex-1 max-h-125 w-full resize-none bg-transparent border-none outline-none focus:ring focus:rounded-lg focus:rind-[hsla(216,19%,90%,1)]"
             value={content}
             placeholder="Start typing your note here…"
             onChange={(e) =>
@@ -196,7 +196,7 @@ const Editor = ({
               Save Note
             </button>
             <button
-              className="bg-[hsla(216,26%,96%,1)] text-[hsla(222,11%,36%,1)] px-4 py-3 rounded-lg cursor-pointer"
+              className="bg-[hsla(216,26%,96%,1)] text-[hsla(222,11%,36%,1)] px-4 py-3 rounded-lg cursor-pointer dark:bg-[hsla(231,16%,16%,1)]"
               type="button"
               onClick={() => selectedNote && handleCancelNote(selectedNote.id)}
             >
@@ -207,7 +207,7 @@ const Editor = ({
       </div>
 
       {selectedNote && !selectedNote.isNew && (
-        <div className="lg:flex-1 flex flex-col py-5 px-6 gap-3 lg:max-w-64.5 border-[hsla(216,19%,90%,1)] max-lg:border-t dark:border-[hsla(231,16%,16%,1)]">
+        <div className="flex-1 flex flex-col py-5 px-6 gap-3 lg:max-w-64.5 border-[hsla(216,19%,90%,1)] max-lg:border-t dark:border-[hsla(231,16%,16%,1)]">
           <button
             className="flex border border-[hsla(219,15%,82%,1)] dark:border-[hsla(231,16%,16%,1)] rounded-lg py-3 px-4 gap-2 items-center cursor-pointer w-full"
             onClick={() => {
