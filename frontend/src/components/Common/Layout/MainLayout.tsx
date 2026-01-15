@@ -16,16 +16,6 @@ const MainLayout = () => {
   const [cookies, removeCookie] = useCookies(["accessToken"]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const filteredNotes = notes.filter((note) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      note.title.toLowerCase().includes(query) ||
-      note.content.toLowerCase().includes(query) ||
-      note.tags.some((tag) => tag.toLowerCase().includes(query))
-    );
-  });
 
   async function getCurrentUser(token: string) {
     try {
@@ -81,17 +71,26 @@ const MainLayout = () => {
     <div className="flex h-screen overflow-auto bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white relative">
       <NotesListSidebar notes={notes} />
       <div className="flex flex-col flex-1 min-w-0">
-        <Header
-          onSettingsClick={() => navigate("/settings")}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <Header onSettingsClick={() => navigate("/settings")} />
         <div className="flex-1 overflow-auto">
           <Outlet
             context={{
-              notes: filteredNotes,
+              notes,
               setNotes,
               token: cookies.accessToken,
+              onArchiveOrRestore: (id: string) => {
+                setNotes((prev) =>
+                  prev.map((note) =>
+                    note.id === id
+                      ? {
+                          ...note,
+                          status:
+                            note.status === "active" ? "archived" : "active",
+                        }
+                      : note
+                  )
+                );
+              },
             }}
           />
         </div>

@@ -15,16 +15,9 @@ const ArchivedNotesPage = () => {
   const { notes, setNotes, token } = useOutletContext<NotesProps>();
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const navigate = useNavigate();
-  
-
-  const archivedNotes = notes.filter((note) => note.status === "archived");
-
-  console.log("all notes:", notes);
-console.log("archived notes:", archivedNotes);
 
   const handleCreateNote = () => {
     navigate("/notes", { state: { create: true } });
-
   };
 
   const handleArchiveOrRestore = async (id: string) => {
@@ -55,7 +48,8 @@ console.log("archived notes:", archivedNotes);
   return (
     <div>
       <NotesPageTemplate
-        notes={archivedNotes}
+        notes={notes}
+        filter={(note) => note.status === "archived"}
         setNotes={setNotes}
         token={token}
         onArchiveOrRestore={handleArchiveOrRestore}

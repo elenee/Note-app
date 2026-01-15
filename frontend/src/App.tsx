@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ForgotPasswordPage/ResetPasswordPage";
+import SearchPage from "./pages/Search/SearchPage";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="archived" element={<ArchivedNotesPage />} />
             <Route path="tags/:tagName" element={<NotesByTagPage />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="search" element={<SearchPage />} />
           </Route>
 
           <Route path="/" element={<Navigate to="/auth/sign-in" />} />

@@ -15,6 +15,7 @@ import { ArchiveIcon, DeleteIcon } from "../../../Icons/Icons";
 type NotesPageTemplateProps = {
   notes: Note[];
   setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  filter?: (note: Note) => boolean;
   token?: string;
   onArchiveOrRestore: (id: string) => void;
   infoMessage?: React.ReactNode;
@@ -27,6 +28,7 @@ type NotesPageTemplateProps = {
 
 const NotesPageTemplate = ({
   notes,
+  filter,
   setNotes,
   token,
   onArchiveOrRestore,
@@ -41,6 +43,8 @@ const NotesPageTemplate = ({
   const [modalType, setModalType] = useState<"delete" | "archive" | null>(null);
   const [modalNoteId, setModalNoteId] = useState<string | null>(null);
   const prevTagsRef = useRef<string[]>(selectedNoteInternal?.tags ?? []);
+
+  const visibleNotes = filter ? notes.filter(filter) : notes
 
   const selectedNoteState = selectedNoteProp ?? selectedNoteInternal;
   const setSelectedNoteState = setSelectedNoteProp ?? setSelectedNoteInternal;
@@ -174,7 +178,7 @@ const NotesPageTemplate = ({
     <div className="flex">
       <div>
         <NotesList
-          notes={notes}
+          notes={visibleNotes}
           handleSelectedNote={setSelectedNoteState}
           selectedNote={selectedNoteState}
           onNoteCreation={handleNoteCreation}

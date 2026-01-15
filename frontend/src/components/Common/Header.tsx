@@ -1,22 +1,35 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 interface IHeaderProps {
   onSettingsClick: () => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
 }
 
-const Header = ({
-  onSettingsClick,
-  searchQuery,
-  setSearchQuery,
-}: IHeaderProps) => {
+const Header = ({ onSettingsClick }: IHeaderProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const location = useLocation();
-  let title = "";
+  const { search } = useLocation();
+  let title: React.ReactNode;
+  const queryTitle = new URLSearchParams(search).get("q");
+
+  const searchQuery = searchParams.get("q") ?? "";
+  const onSearchChange = (value: string) => {
+    if (!value.trim()) {
+      searchParams.delete("q");
+      setSearchParams(searchParams);
+      navigate("/notes");
+    } else {
+      navigate(`/search?q=${encodeURIComponent(value)}`);
+    }
+  };
 
   const pathname = location.pathname;
-  if (searchQuery.trim()) {
-    title = `Showing results for: ${searchQuery}`;
+  if (pathname === "/search") {
+    title = (
+      <>
+        <span className="text-[grey]">Showing results for:</span> {queryTitle}
+      </>
+    );
   } else if (pathname === "/notes" || pathname === "/") {
     title = "All Notes";
   } else if (pathname === "/archived") {
@@ -42,7 +55,7 @@ const Header = ({
             type="text"
             placeholder="Search by title, content, or tags…"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="w-full text-sm placeholder:text-xs outline-none bg-transparent"
           />
         </div>
