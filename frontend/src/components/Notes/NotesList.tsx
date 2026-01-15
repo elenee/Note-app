@@ -42,7 +42,7 @@ const NotesList = ({
           if (location.pathname !== "/notes") {
             navigate("/notes", { state: { create: true } });
             return;
-          } 
+          }
           onNoteCreation();
         }}
         className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer w-full md:w-auto"

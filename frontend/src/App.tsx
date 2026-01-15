@@ -46,11 +46,19 @@ const App = () => {
 
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Navigate to="/notes" />} />
-            <Route path="notes" element={<AllNotesPage />} />
-            <Route path="archived" element={<ArchivedNotesPage />} />
-            <Route path="tags/:tagName" element={<NotesByTagPage />} />
+            <Route path="notes" element={<AllNotesPage />}>
+              <Route path=":noteName" element={<AllNotesPage />} />
+            </Route>
+            <Route path="archived-notes" element={<ArchivedNotesPage />}>
+              <Route path=":noteName" element={<ArchivedNotesPage />} />
+            </Route>
+            <Route path="tags/:tagName" element={<NotesByTagPage />}>
+              <Route path=":noteName" element={<NotesByTagPage />} />
+            </Route>
             <Route path="settings" element={<SettingsPage />} />
-            <Route path="search" element={<SearchPage />} />
+            <Route path="search" element={<SearchPage />}>
+              <Route path=":noteName" element={<SearchPage />} />
+            </Route>
           </Route>
 
           <Route path="/" element={<Navigate to="/auth/sign-in" />} />

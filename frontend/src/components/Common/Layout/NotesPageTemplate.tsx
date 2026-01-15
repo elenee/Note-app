@@ -9,7 +9,7 @@ import {
   showNoteUpdatedToast,
 } from "../CustomToast";
 import ConfirmModal from "../ConfirmModal";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArchiveIcon, DeleteIcon } from "../../../Icons/Icons";
 
 type NotesPageTemplateProps = {
@@ -22,8 +22,8 @@ type NotesPageTemplateProps = {
   emptyMessage?: React.ReactNode;
   onNoteCreation?: () => void;
   createOnMount?: boolean;
-  selectedNote?: Note | null;
-  setSelectedNote?: React.Dispatch<React.SetStateAction<Note | null>>;
+  selectedNote: Note | null;
+  setSelectedNote: React.Dispatch<React.SetStateAction<Note | null>>;
 };
 
 const NotesPageTemplate = ({
@@ -34,20 +34,14 @@ const NotesPageTemplate = ({
   onArchiveOrRestore,
   infoMessage,
   emptyMessage,
-  selectedNote: selectedNoteProp,
-  setSelectedNote: setSelectedNoteProp,
+  selectedNote,
+  setSelectedNote,
 }: NotesPageTemplateProps) => {
-  const [selectedNoteInternal, setSelectedNoteInternal] = useState<Note | null>(
-    null
-  );
   const [modalType, setModalType] = useState<"delete" | "archive" | null>(null);
   const [modalNoteId, setModalNoteId] = useState<string | null>(null);
-  const prevTagsRef = useRef<string[]>(selectedNoteInternal?.tags ?? []);
+  const prevTagsRef = useRef<string[]>(selectedNote?.tags ?? []);
 
-  const visibleNotes = filter ? notes.filter(filter) : notes
-
-  const selectedNoteState = selectedNoteProp ?? selectedNoteInternal;
-  const setSelectedNoteState = setSelectedNoteProp ?? setSelectedNoteInternal;
+  const visibleNotes = filter ? notes.filter(filter) : notes;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,7 +58,7 @@ const NotesPageTemplate = ({
     const existingNewNote = notes.find((n) => n.isNew);
 
     if (existingNewNote) {
-      setSelectedNoteState(existingNewNote);
+      setSelectedNote(existingNewNote);
       return;
     }
 
@@ -82,8 +76,8 @@ const NotesPageTemplate = ({
     const sidebarNote = { ...newNote };
 
     setNotes((prev) => [sidebarNote, ...prev]);
-    setSelectedNoteState(sidebarNote);
-  }, [notes]);
+    setSelectedNote(sidebarNote);
+  }, [notes, setSelectedNote, setNotes]);
 
   const handleSaveNote = async (note: Note) => {
     if (!token) {
@@ -113,9 +107,9 @@ const NotesPageTemplate = ({
 
         return prev.map((n) => (n.id === finalNote.id ? finalNote : n));
       });
-      prevTagsRef.current = selectedNoteInternal?.tags ?? [];
+      prevTagsRef.current = selectedNote?.tags ?? [];
 
-      setSelectedNoteState(finalNote);
+      setSelectedNote(finalNote);
 
       if (note.isNew) {
         showNoteSavedToast();
@@ -128,8 +122,12 @@ const NotesPageTemplate = ({
   };
 
   const handleCancelNote = (id: string) => {
-    setNotes((prev) => prev.filter((n) => n.id !== id));
-    if (selectedNoteState?.id === id) setSelectedNoteState(null);
+    const note = notes.find((n) => n.id == id);
+    if (!note) return;
+    if (note.isNew) {
+      setNotes((prev) => prev.filter((n) => n.id !== id));
+    }
+    if (selectedNote?.id === id) setSelectedNote(null);
   };
 
   const handleDeleteNote = async (id: string) => {
@@ -144,7 +142,7 @@ const NotesPageTemplate = ({
       await notesService.deleteNote(id, token);
       console.log("delete");
       setNotes((prev) => prev.filter((n) => n.id !== id));
-      setSelectedNoteState(null);
+      setSelectedNote(null);
       showNoteDeletedToast();
     } catch (error: any) {
       console.log("Failed to delete note", error.message);
@@ -174,22 +172,44 @@ const NotesPageTemplate = ({
     setModalNoteId(null);
   };
 
+  const handleNoteClick = (note: Note) => {
+    setSelectedNote(note);
+
+    if (location.pathname.startsWith("/tags/")) {
+      const { tagName } = useParams<{ tagName: string }>();
+      if (!tagName) return;
+
+      const tagBase = `/tags/${encodeURIComponent(tagName)}`;
+      navigate(`${tagBase}/${encodeURIComponent(note.title)}`, {
+        replace: true,
+      });
+    } else if (location.pathname.startsWith("/archived-notes")) {
+      navigate(`/archived-notes/${encodeURIComponent(note.title)}`, {
+        replace: true,
+      });
+    } else if (location.pathname.startsWith("/search")) {
+      navigate(`/search/${encodeURIComponent(note.title)}`, { replace: true });
+    } else {
+      navigate(`/notes/${encodeURIComponent(note.title)}`, { replace: true });
+    }
+  };
+
   return (
     <div className="flex">
       <div>
         <NotesList
           notes={visibleNotes}
-          handleSelectedNote={setSelectedNoteState}
-          selectedNote={selectedNoteState}
+          handleSelectedNote={handleNoteClick}
+          selectedNote={selectedNote}
           onNoteCreation={handleNoteCreation}
           emptyMessage={emptyMessage}
           infoMessage={infoMessage}
         />
       </div>
-      {selectedNoteState && (
+      {selectedNote && (
         <Editor
-          selectedNote={selectedNoteState}
-          setSelectedNote={setSelectedNoteState}
+          selectedNote={selectedNote}
+          setSelectedNote={setSelectedNote}
           onSaveNote={handleSaveNote}
           onDeleteNote={(id) => openDeleteModal(id)}
           onArchive={(id) => {

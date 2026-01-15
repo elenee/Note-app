@@ -30,17 +30,17 @@ const Header = ({ onSettingsClick }: IHeaderProps) => {
         <span className="text-[grey]">Showing results for:</span> {queryTitle}
       </>
     );
-  } else if (pathname === "/notes" || pathname === "/") {
+  } else if (pathname.startsWith("/notes") || pathname === "/") {
     title = "All Notes";
-  } else if (pathname === "/archived") {
+  } else if (pathname.startsWith("/archived")) {
     title = "Archived Notes";
-  } else if (pathname === "/settings") {
+  } else if (pathname.startsWith("/settings")) {
     title = "Settings";
   } else if (pathname.startsWith("/tags/")) {
     const tagName = pathname.split("/tags/")[1];
     title = `Notes Tagged: ${decodeURIComponent(tagName)}`;
   } else {
-    title = "notes";
+    title = "Notes";
   }
 
   return (

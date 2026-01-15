@@ -1,7 +1,7 @@
-import { useLocation, useOutletContext } from "react-router-dom";
+import {useOutletContext, useParams } from "react-router-dom";
 import type { Note } from "../../types/note";
 import NotesPageTemplate from "../../components/Common/Layout/NotesPageTemplate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import notesService from "../../services/notesService";
 import {
   showNoteArchivedToast,
@@ -18,17 +18,25 @@ const NotesByTagPage = () => {
   const { notes, setNotes, token } = useOutletContext<NotesProps>();
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
-  const location = useLocation();
-
-  const pathname = location.pathname;
-  const tagName = pathname.split("/tags/")[1];
-  const tag = decodeURIComponent(tagName);
-
-  const normalizedTag = tagName.trim().toLowerCase();
+  const { tagName, noteName } = useParams<{
+    tagName: string;
+    noteName?: string;
+  }>();
+  const decodedTag = tagName ? decodeURIComponent(tagName) : "";
+  const normalizedTag = decodedTag.trim().toLowerCase();
 
   const filteredNotes = notes.filter((note: Note) =>
     note.tags?.map((t) => t.toLowerCase()).includes(normalizedTag)
   );
+
+  useEffect(() => {
+    if (noteName) {
+      const note = notes.find((n) => n.title === decodeURIComponent(noteName));
+      setSelectedNote(note || null);
+    } else {
+      setSelectedNote(null);
+    }
+  }, [noteName, notes]);
 
   const handleArchiveOrRestore = async (id: string) => {
     const note = notes.find((n) => n.id === id);
@@ -69,10 +77,10 @@ const NotesByTagPage = () => {
         setSelectedNote={setSelectedNote}
         emptyMessage={
           <p>
-            No notes have the tag <strong>{tag}</strong> yet.
+            No notes have the tag <strong>{normalizedTag}</strong> yet.
           </p>
         }
-        infoMessage={`All notes with the ”Dev” tag are shown here. "${tag}"`}
+        infoMessage={`All notes with the ”Dev” tag are shown here. "${normalizedTag}"`}
       />
     </div>
   );

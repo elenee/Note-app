@@ -39,7 +39,7 @@ const NotesListSidebar = ({ notes }: NotesListSidebarProps) => {
           {pathname === "/notes" ? <ArrowIcon /> : ""}
         </button>
         <button
-          onClick={() => navigate("/archived")}
+          onClick={() => navigate("/archived-notes")}
           className={`group px-3 py-2.5 rounded-lg w-full flex justify-between items-center cursor-pointer ${
             pathname === "/archived"
               ? "bg-[hsla(216,26%,96%,1)] dark:bg-[hsla(231,16%,16%,1)] dark:text-white"
@@ -49,14 +49,14 @@ const NotesListSidebar = ({ notes }: NotesListSidebarProps) => {
           <div className="flex gap-2">
             <span
               className={`transition-colors group-hover:text-[hsla(228,100%,60%,1)] ${
-                pathname === "/archived" ? "text-[hsla(228,100%,60%,1)]" : ""
+                pathname === "/archived-notes" ? "text-[hsla(228,100%,60%,1)]" : ""
               }`}
             >
               <ArchiveIcon />
             </span>
             <span>Archived notes</span>
           </div>
-          {pathname === "/archived" ? <ArrowIcon /> : ""}
+          {pathname === "/archived-notes" ? <ArrowIcon /> : ""}
         </button>
       </div>
       <p className="px-2">Tags</p>
