@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { ArrowIcon } from "../../Icons/Icons";
 
 interface SettingsButtonProps {
   label: string;
@@ -21,28 +22,7 @@ const SettingsButton = ({ label, icon, active, onClick, showArrow }: SettingsBut
         {label}
       </div>
       {showArrow && active && (
-        <svg
-          width="6"
-          height="10"
-          viewBox="0 0 6 10"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g clipPath="url(#clip0)">
-            <path
-              d="M1 1L5 5L1 9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </g>
-          <defs>
-            <clipPath id="clip0">
-              <rect width="6" height="10" fill="white" />
-            </clipPath>
-          </defs>
-        </svg>
+        <ArrowIcon/>
       )}
     </button>
   );

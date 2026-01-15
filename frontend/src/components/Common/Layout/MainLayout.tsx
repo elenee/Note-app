@@ -48,7 +48,20 @@ const MainLayout = () => {
     const fetchNotes = async () => {
       try {
         const notes = await notesService.getNotes(token);
-        setNotes(notes);
+        console.log(notes);
+        setNotes((prev) => {
+          const byId = new Map<string, Note>();
+
+          prev.forEach((note) => {
+            byId.set(note.id, note);
+          });
+
+          notes.forEach((note: Note) => {
+            byId.set(note.id, note);
+          });
+
+          return Array.from(byId.values());
+        });
       } catch (error: any) {
         removeCookie("accessToken", { path: "/" });
         console.log("failed to fecth notes", error.message);

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import type { ToastOptions } from "react-toastify";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { ErrorIcon, SuccessIcon } from "../../Icons/Icons";
 
 interface CustomToastProps {
   message: string;
@@ -13,35 +14,11 @@ const CustomToast = ({ message, type = "success", icon }: CustomToastProps) => {
   const defaultIcon =
     type === "success" ? (
       <div className="inline-flex items-center justify-center p-px shrink-0 w-4 h-4 text-white bg-green-500 rounded-[50%] dark:bg-green-900">
-        <svg
-          className="w-5 h-5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <SuccessIcon />
       </div>
     ) : (
       <div className="inline-flex items-center justify-center p-px shrink-0 w-4 h-4 text-white bg-red-500 rounded-[50%] dark:bg-red-900">
-        <svg
-          className="w-4 h-4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        <ErrorIcon />
       </div>
     );
 
@@ -110,18 +87,7 @@ export const showNoteArchivedToast = () => {
     <div className="flex items-center justify-between w-full max-w-97.5 h-8 p-2 bg-white border border-[hsla(216,19%,90%,1)] rounded-lg shadow-lg dark:bg-gray-800">
       <div className="flex items-center space-x-2">
         <div className="inline-flex items-center justify-center p-px shrink-0 w-4 h-4 text-white bg-green-500 rounded-[50%] dark:bg-green-900">
-          <svg
-            className="w-3 h-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <SuccessIcon />
         </div>
         <span className="text-[12px] font-normal text-gray-900 dark:text-white">
           Note Archived
@@ -144,18 +110,7 @@ export const showNoteRestoredToast = () => {
     <div className="flex items-center justify-between w-full max-w-97.5 h-8 p-2 bg-white border border-[hsla(216,19%,90%,1)] rounded-lg shadow-lg dark:bg-gray-800">
       <div className="flex items-center space-x-2">
         <div className="inline-flex items-center justify-center p-px shrink-0 w-4 h-4 text-white bg-green-500 rounded-[50%] dark:bg-green-900">
-          <svg
-            className="w-3 h-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <SuccessIcon />
         </div>
         <span className="text-[12px] font-normal text-gray-900 dark:text-white">
           Note restored to active notes.

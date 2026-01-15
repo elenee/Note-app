@@ -15,11 +15,16 @@ const ArchivedNotesPage = () => {
   const { notes, setNotes, token } = useOutletContext<NotesProps>();
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const navigate = useNavigate();
+  
 
   const archivedNotes = notes.filter((note) => note.status === "archived");
 
+  console.log("all notes:", notes);
+console.log("archived notes:", archivedNotes);
+
   const handleCreateNote = () => {
     navigate("/notes", { state: { create: true } });
+
   };
 
   const handleArchiveOrRestore = async (id: string) => {
@@ -52,8 +57,8 @@ const ArchivedNotesPage = () => {
       <NotesPageTemplate
         notes={archivedNotes}
         setNotes={setNotes}
+        token={token}
         onArchiveOrRestore={handleArchiveOrRestore}
-        onNoteCreation={handleCreateNote}
         selectedNote={selectedNote}
         setSelectedNote={setSelectedNote}
         infoMessage="All your archived notes are stored here. You can restore or delete them anytime."

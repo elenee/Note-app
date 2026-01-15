@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Note } from "../../../types/note";
 import notesService from "../../../services/notesService";
 import NotesList from "../../Notes/NotesList";
@@ -9,77 +9,8 @@ import {
   showNoteUpdatedToast,
 } from "../CustomToast";
 import ConfirmModal from "../ConfirmModal";
-
-const DeleteIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12.3767 3.10322L13.0586 4.53105H15.2581C15.9343 4.53105 16.4826 5.05735 16.4826 5.70658V6.57714C16.4826 7.02103 16.1077 7.38087 15.6454 7.38087H4.17056C3.70818 7.38087 3.33334 7.02103 3.33334 6.57714V5.70658C3.33334 5.05735 3.88158 4.53105 4.55787 4.53105H6.75739L7.43922 3.10322C7.6438 2.67474 8.0898 2.40002 8.5808 2.40002H11.2351C11.7261 2.40002 12.1721 2.67474 12.3767 3.10322Z"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M15.2 7.44061V14.3892C15.2 15.7209 14.0895 16.8004 12.7195 16.8004H7.09717C5.72725 16.8004 4.6167 15.7209 4.6167 14.3892V7.44061"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M8.49936 10.2531V13.8598M11.3164 10.2531V13.8598"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
-
-const ArchiveIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M17.5 6.48513V13.5141C17.5 15.9708 15.7657 17.5 13.3113 17.5H6.68865C4.23432 17.5 2.5 15.9708 2.5 13.5133V6.48513C2.5 4.02837 4.23432 2.5 6.68865 2.5H13.3113C15.7657 2.5 17.5 4.03567 17.5 6.48513Z"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M12.5 11.6667L9.9985 14.1667L7.5 11.6667"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M9.99829 14.1666V8.33331"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M17.4447 5.83331H2.54883"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
+import { useLocation, useNavigate } from "react-router-dom";
+import { ArchiveIcon, DeleteIcon } from "../../../Icons/Icons";
 
 type NotesPageTemplateProps = {
   notes: Note[];
@@ -101,8 +32,6 @@ const NotesPageTemplate = ({
   onArchiveOrRestore,
   infoMessage,
   emptyMessage,
-  onNoteCreation,
-  createOnMount,
   selectedNote: selectedNoteProp,
   setSelectedNote: setSelectedNoteProp,
 }: NotesPageTemplateProps) => {
@@ -116,15 +45,28 @@ const NotesPageTemplate = ({
   const selectedNoteState = selectedNoteProp ?? selectedNoteInternal;
   const setSelectedNoteState = setSelectedNoteProp ?? setSelectedNoteInternal;
 
-  const handleNoteCreation = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.create) {
+      handleNoteCreation();
+      navigate(".", { replace: true, state: {} });
+    }
+  }, []);
+
+  const handleNoteCreation = useCallback(() => {
+    console.log("inside handleNoteCreation");
     const existingNewNote = notes.find((n) => n.isNew);
+
     if (existingNewNote) {
       setSelectedNoteState(existingNewNote);
       return;
     }
+
     const newNote: Note = {
       id: crypto.randomUUID(),
-      title: "",
+      title: "Untitled Note",
       content: "",
       tags: [],
       status: "active",
@@ -132,10 +74,12 @@ const NotesPageTemplate = ({
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    const sidebarNote = { ...newNote, title: "Untitled note" };
+
+    const sidebarNote = { ...newNote };
+
     setNotes((prev) => [sidebarNote, ...prev]);
     setSelectedNoteState(sidebarNote);
-  };
+  }, [notes]);
 
   const handleSaveNote = async (note: Note) => {
     if (!token) {
@@ -186,12 +130,15 @@ const NotesPageTemplate = ({
 
   const handleDeleteNote = async (id: string) => {
     if (!token) {
-      console.warn("No token, skipping save");
+      console.log("!token");
       return;
     }
-    if (!id) return;
+    if (!id) {
+      return;
+    }
     try {
       await notesService.deleteNote(id, token);
+      console.log("delete");
       setNotes((prev) => prev.filter((n) => n.id !== id));
       setSelectedNoteState(null);
       showNoteDeletedToast();
@@ -199,13 +146,6 @@ const NotesPageTemplate = ({
       console.log("Failed to delete note", error.message);
     }
   };
-
-  useEffect(() => {
-    if (createOnMount) {
-      handleNoteCreation();
-    }
-  }, [createOnMount]);
-  const createHandler = onNoteCreation ?? handleNoteCreation;
 
   const openDeleteModal = (id: string) => {
     setModalNoteId(id);
@@ -237,7 +177,7 @@ const NotesPageTemplate = ({
           notes={notes}
           handleSelectedNote={setSelectedNoteState}
           selectedNote={selectedNoteState}
-          onNoteCreation={createHandler}
+          onNoteCreation={handleNoteCreation}
           emptyMessage={emptyMessage}
           infoMessage={infoMessage}
         />

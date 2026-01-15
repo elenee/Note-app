@@ -81,7 +81,7 @@ const ThemeOption = <T extends string>({
           disabled={!hasChanges}
           onClick={() => {
             onChange(pendingSelected);
-            showSettingsUpdatedToast()
+            showSettingsUpdatedToast();
           }}
           className={`px-4 py-3 rounded-lg text-white transition
             ${

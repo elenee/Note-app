@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import type { Note } from "../../types/note";
 import NotesPageTemplate from "../../components/Common/Layout/NotesPageTemplate";
 import { useState } from "react";
@@ -17,10 +17,8 @@ type NotesProps = {
 const NotesByTagPage = () => {
   const { notes, setNotes, token } = useOutletContext<NotesProps>();
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-  const navigate = useNavigate();
 
   const location = useLocation();
-  const state = location.state as { create?: boolean } | undefined;
 
   const pathname = location.pathname;
   const tagName = pathname.split("/tags/")[1];
@@ -31,10 +29,6 @@ const NotesByTagPage = () => {
   const filteredNotes = notes.filter((note: Note) =>
     note.tags?.map((t) => t.toLowerCase()).includes(normalizedTag)
   );
-
-  const handleCreateNote = () => {
-    navigate("/notes", { state: { create: true } });
-  };
 
   const handleArchiveOrRestore = async (id: string) => {
     const note = notes.find((n) => n.id === id);
@@ -69,11 +63,10 @@ const NotesByTagPage = () => {
       <NotesPageTemplate
         notes={filteredNotes}
         setNotes={setNotes}
+        token={token}
         onArchiveOrRestore={handleArchiveOrRestore}
-        onNoteCreation={handleCreateNote}
         selectedNote={selectedNote}
         setSelectedNote={setSelectedNote}
-        createOnMount={state?.create}
         emptyMessage={
           <p>
             No notes have the tag <strong>{tag}</strong> yet.

@@ -1,9 +1,10 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import type { Note } from "../../types/note";
 
 type NotesListProps = {
   notes: Note[];
   handleSelectedNote: (note: Note) => void;
-  onNoteCreation?: () => void;
+  onNoteCreation: () => void;
   selectedNote: Note | null;
   onArchiveOrRestore?: (id: string) => void;
   infoMessage?: React.ReactNode;
@@ -31,10 +32,19 @@ const NotesList = ({
       year: "numeric",
     });
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <div className="w-72.5 max-xl:w-55 min-w-50 shrink-0 border-r h-screen border-[hsla(216,19%,90%,1)] dark:border-[hsla(231,16%,16%,1)] pl-8 pr-4 pt-5 pb-6 flex flex-col gap-4 bg-white dark:bg-[hsla(222,32%,8%,1)] dark:text-white">
       <button
-        onClick={onNoteCreation}
+        onClick={() => {
+          if (location.pathname !== "/notes") {
+            navigate("/notes", { state: { create: true } });
+            return;
+          } 
+          onNoteCreation();
+        }}
         className="bg-[hsla(228,100%,60%,1)] px-2 py-1.5 text-white rounded-lg cursor-pointer w-full md:w-auto"
       >
         + Create New Note
