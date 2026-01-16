@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MonospaceIcon, SansSerifIcon, SerifIcon } from "../../Icons/Icons";
 import type { ThemeOptionItem } from "./ThemeOption";
 import ThemeOption from "./ThemeOption";
@@ -25,12 +26,12 @@ const themeOptions: ThemeOptionItem<FontThemeOptions>[] = [
   },
 ];
 
-type FontThemeProps = {
-  selected: FontThemeOptions;
-  onChange: (value: FontThemeOptions) => void;
-};
+const FontTheme = () => {
+  const [fontTheme, setFontTheme] = useState<FontThemeOptions>(() => {
+    const saved = localStorage.getItem("font-theme") as FontThemeOptions | null;
+    return saved ?? "sans-serif";
+  });
 
-const FontTheme = ({ selected, onChange }: FontThemeProps) => {
   const applyFontTheme = (font: FontThemeOptions) => {
     const root = document.documentElement;
 
@@ -43,14 +44,14 @@ const FontTheme = ({ selected, onChange }: FontThemeProps) => {
     root.style.setProperty("--app-font", map[font]);
     localStorage.setItem("font-theme", font);
 
-    onChange(font);
+    setFontTheme(font)
   };
 
   return (
     <ThemeOption<FontThemeOptions>
       title="Font Theme"
       options={themeOptions}
-      selected={selected}
+      selected={fontTheme}
       onChange={applyFontTheme}
     />
   );

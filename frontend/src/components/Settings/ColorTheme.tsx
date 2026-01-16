@@ -1,8 +1,7 @@
+import { useTheme } from "../../context/ThemeContext";
 import { MoonIcon, SunIcon, SystemIcon } from "../../Icons/Icons";
 import type { ThemeOptionItem } from "./ThemeOption";
 import ThemeOption from "./ThemeOption";
-
-
 
 export type ColorThemeOption = "light" | "dark" | "system";
 
@@ -27,18 +26,14 @@ const colorOptions: ThemeOptionItem<ColorThemeOption>[] = [
   },
 ];
 
-type ColorThemeProps = {
-  selected: ColorThemeOption;
-  onChange: (value: ColorThemeOption) => void;
-};
-
-const ColorTheme = ({ selected, onChange }: ColorThemeProps) => {
+const ColorTheme = () => {
+  const { colorTheme, setColorTheme } = useTheme();
   return (
     <ThemeOption<ColorThemeOption>
       title="Color Theme"
       options={colorOptions}
-      selected={selected}
-      onChange={onChange}
+      selected={colorTheme}
+      onChange={setColorTheme}
     />
   );
 };

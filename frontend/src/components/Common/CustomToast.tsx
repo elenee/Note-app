@@ -95,7 +95,7 @@ export const showNoteArchivedToast = () => {
       </div>
 
       <Link
-        to="/archived"
+        to="/archived-notes"
         className="text-[12px] underline text-gray-900 dark:text-white mr-6"
       >
         Archived Notes

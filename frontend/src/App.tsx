@@ -15,6 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ForgotPasswordPage/ResetPasswordPage";
 import SearchPage from "./pages/Search/SearchPage";
+import ColorTheme from "./components/Settings/ColorTheme";
+import FontTheme from "./components/Settings/FontTheme";
+import ChangePassword from "./components/Settings/ChangePassword";
 
 const App = () => {
   return (
@@ -55,7 +58,12 @@ const App = () => {
             <Route path="tags/:tagName" element={<NotesByTagPage />}>
               <Route path=":noteName" element={<NotesByTagPage />} />
             </Route>
-            <Route path="settings" element={<SettingsPage />} />
+            <Route path="settings" element={<SettingsPage />}>
+              <Route index element={<ColorTheme />} />
+              <Route path="color" element={<ColorTheme />} />
+              <Route path="font" element={<FontTheme />} />
+              <Route path="password" element={<ChangePassword />} />
+            </Route>
             <Route path="search" element={<SearchPage />}>
               <Route path=":noteName" element={<SearchPage />} />
             </Route>
